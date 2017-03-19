@@ -7,7 +7,6 @@ public class ProceduralCharacterController : MonoBehaviour
 
     public Animator animator;
     public GameObject ragdoll;
-    private Animator ragDollAnim;
     private new Rigidbody rigidbody;
 
     private Transform leftFoot;
@@ -20,27 +19,10 @@ public class ProceduralCharacterController : MonoBehaviour
     private bool wasGrounded = true;
     private bool wasInAir = false;
 
-    // IK
-    public Transform leftHandIKTarget;
-    public Transform rightHandIKTarget;
-    public Transform leftFootIKTarget;
-    public Transform rightFootIKTarget;
-    public Transform lookAtTarget;
-
-    public float iKPositionWeight = 1f;
-    public float iKRotationWeight = 1f;
-
-    public float iKLookWeight = 1f;
-    public float iKBodyWeight = 0f;
-    public float iKHeadWeight = 1f;
-    public float iKEyesWeight = 0f;
-    public float iKClampWeight = 1f;
-
     void Start()
     {
         rigidbody = ragdoll.GetComponentInChildren<Rigidbody>();
         //distToGround = ragdoll.GetComponentInChildren<Collider>().bounds.extents.y;
-        ragDollAnim = ragdoll.GetComponentInChildren<Animator>();
         leftFoot = ragdoll.transform.Find("Hips/LeftUpLeg/LeftLeg/LeftFoot");
         rightFoot = ragdoll.transform.Find("Hips/RightUpLeg/RightLeg/RightFoot");
     }
@@ -85,43 +67,6 @@ public class ProceduralCharacterController : MonoBehaviour
         Debug.DrawLine(rightFoot.transform.position, rightFoot.transform.position + direction * distance, Color.red);
 
         return leftFootGrounded || rightFootGrounded;
-    }
-
-    void OnAnimatorIK(int layerIndex)
-    {
-        if (leftHandIKTarget != null)
-        {
-            ragDollAnim.SetIKPositionWeight(AvatarIKGoal.LeftHand, iKPositionWeight);
-            //anim.SetIKRotationWeight(AvatarIKGoal.LeftHand, iKRotationWeight);
-            ragDollAnim.SetIKPosition(AvatarIKGoal.LeftHand, leftHandIKTarget.position);
-        }
-
-        if (rightHandIKTarget != null)
-        {
-            ragDollAnim.SetIKPositionWeight(AvatarIKGoal.RightHand, iKPositionWeight);
-            //anim.SetIKRotationWeight(AvatarIKGoal.RightHand, iKRotationWeight);
-            ragDollAnim.SetIKPosition(AvatarIKGoal.RightHand, rightHandIKTarget.position);
-        }
-
-        if (leftFootIKTarget != null)
-        {
-            ragDollAnim.SetIKPositionWeight(AvatarIKGoal.LeftFoot, iKPositionWeight);
-            //anim.SetIKRotationWeight(AvatarIKGoal.LeftFoot, iKRotationWeight);
-            ragDollAnim.SetIKPosition(AvatarIKGoal.LeftFoot, leftFootIKTarget.position);
-        }
-
-        if (rightFootIKTarget != null)
-        {
-            ragDollAnim.SetIKPositionWeight(AvatarIKGoal.RightFoot, iKPositionWeight);
-            //anim.SetIKRotationWeight(AvatarIKGoal.RightFoot, iKRotationWeight);
-            ragDollAnim.SetIKPosition(AvatarIKGoal.RightFoot, rightFootIKTarget.position);
-        }
-
-        if (lookAtTarget != null)
-        {
-            ragDollAnim.SetLookAtWeight(iKLookWeight, iKBodyWeight, iKHeadWeight, iKEyesWeight, iKClampWeight);
-            ragDollAnim.SetLookAtPosition(lookAtTarget.position);
-        }
     }
 
 }
