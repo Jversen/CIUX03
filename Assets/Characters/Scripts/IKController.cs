@@ -31,7 +31,6 @@ public class IKController : MonoBehaviour {
 
     void OnAnimatorIK(int layerIndex)
     {
-        Debug.Log("Animate");
         if (leftHandIKTarget != null)
         {
             anim.SetIKPositionWeight(AvatarIKGoal.LeftHand, iKPositionWeight);
