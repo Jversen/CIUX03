@@ -10,9 +10,15 @@ public class ProceduralCharacterController : MonoBehaviour
     private Animator ragDollAnim;
     private new Rigidbody rigidbody;
 
+    private Transform leftFoot;
+    private Transform rightFoot;
+
     public float jumpDistance = 25f;
 
     private float distToGround;
+
+    private bool wasGrounded = true;
+    private bool wasInAir = false;
 
     // IK
     public Transform leftHandIKTarget;
@@ -33,14 +39,21 @@ public class ProceduralCharacterController : MonoBehaviour
     void Start()
     {
         rigidbody = ragdoll.GetComponentInChildren<Rigidbody>();
-        distToGround = ragdoll.GetComponentInChildren<Collider>().bounds.extents.y;
+        //distToGround = ragdoll.GetComponentInChildren<Collider>().bounds.extents.y;
         ragDollAnim = ragdoll.GetComponentInChildren<Animator>();
-        Debug.Log(ragDollAnim);
+        leftFoot = ragdoll.transform.Find("Hips/LeftUpLeg/LeftLeg/LeftFoot");
+        rightFoot = ragdoll.transform.Find("Hips/RightUpLeg/RightLeg/RightFoot");
     }
 
     void Update()
     {
         bool isGrounded = IsGrounded();
+        //Debug.Log(isGrounded);
+
+        if (!wasGrounded && isGrounded && wasInAir)
+        {
+            animator.SetBool("Grounded", true);
+        }
 
         bool jumpButtonDown = Input.GetButtonDown("Jump");
 
@@ -48,20 +61,30 @@ public class ProceduralCharacterController : MonoBehaviour
         {
             // Start jump animation
             animator.SetTrigger("Jump");
+            animator.SetBool("Grounded", false);
 
             // Add jump force
             rigidbody.velocity = rigidbody.velocity + new Vector3(0, jumpDistance, 0);
         }
+
+        wasInAir = !isGrounded;
+        wasGrounded = isGrounded;
     }
 
     private bool IsGrounded()
     {
         Vector3 start = rigidbody.transform.position;
         Vector3 direction = -Vector3.up;
-        float distance = distToGround + 0.2f;
+        //float distance = distToGround + 0.2f;
+        float distance = 0.2f;
 
-        Debug.DrawLine(rigidbody.transform.position, rigidbody.transform.position + direction * distance, Color.red);
-        return Physics.Raycast(rigidbody.transform.position, direction, distance);
+        bool leftFootGrounded = Physics.Raycast(leftFoot.transform.position, direction, distance);
+        Debug.DrawLine(leftFoot.transform.position, leftFoot.transform.position + direction * distance, Color.red);
+
+        bool rightFootGrounded = Physics.Raycast(rightFoot.transform.position, direction, distance);
+        Debug.DrawLine(rightFoot.transform.position, rightFoot.transform.position + direction * distance, Color.red);
+
+        return leftFootGrounded || rightFootGrounded;
     }
 
     void OnAnimatorIK(int layerIndex)
