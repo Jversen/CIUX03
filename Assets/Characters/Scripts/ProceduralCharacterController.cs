@@ -5,6 +5,8 @@ using UnityEngine;
 public class ProceduralCharacterController : MonoBehaviour
 {
 
+    public bool matchAnimation = false;
+
     public Animator animator;
     public GameObject ragdoll;
     private new Rigidbody rigidbody;
@@ -19,16 +21,27 @@ public class ProceduralCharacterController : MonoBehaviour
     private bool wasGrounded = true;
     private bool wasInAir = false;
 
+    private Transform[] ragdollTransforms;
+    private Transform[] animatorTransforms;
+
     void Start()
     {
         rigidbody = ragdoll.GetComponentInChildren<Rigidbody>();
         //distToGround = ragdoll.GetComponentInChildren<Collider>().bounds.extents.y;
         leftFoot = ragdoll.transform.Find("Hips/LeftUpLeg/LeftLeg/LeftFoot");
         rightFoot = ragdoll.transform.Find("Hips/RightUpLeg/RightLeg/RightFoot");
+
+        ragdollTransforms = ragdoll.transform.Find("Hips").GetComponentsInChildren<Transform>();
+        animatorTransforms = animator.transform.Find("Hips").GetComponentsInChildren<Transform>();
     }
 
     void Update()
     {
+        if (matchAnimation)
+        {
+            matchJoints();
+        }
+
         bool isGrounded = IsGrounded();
         //Debug.Log(isGrounded);
 
@@ -49,8 +62,23 @@ public class ProceduralCharacterController : MonoBehaviour
             rigidbody.velocity = rigidbody.velocity + new Vector3(0, jumpDistance, 0);
         }
 
+        bool fire1ButtonDown = Input.GetButtonDown("Fire1");
+
+        if (fire1ButtonDown)
+        {
+            animator.SetTrigger("Punch");
+        }
+
         wasInAir = !isGrounded;
         wasGrounded = isGrounded;
+    }
+
+    private void matchJoints()
+    {
+        for (int i = 0; i < ragdollTransforms.Length; i ++)
+        {
+            ragdollTransforms[i].rotation = animatorTransforms[i].rotation;
+        }
     }
 
     private bool IsGrounded()
