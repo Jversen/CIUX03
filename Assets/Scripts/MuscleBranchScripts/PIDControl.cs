@@ -5,6 +5,8 @@ using UnityEngine;
 public class PIDControl : MonoBehaviour {
 
 	public Rigidbody body;
+	public Rigidbody legLeftMusclePoint, footLeftMusclePoint, legRightMusclePoint, footRightMusclePoint;
+	private Muscle legLeftMuscle, legRightMuscle;
 
 	public double kp;
 	public double ki;
@@ -64,4 +66,23 @@ public class PIDControl : MonoBehaviour {
 		result = (double) (30) * Mathf.Sin ((float) parameter);
 		return result;
 	}
+
+	public class Muscle{
+		private Rigidbody upper, lower;
+		public Muscle(Rigidbody upper, Rigidbody lower)
+		{
+			this.upper = upper;
+			this.lower = lower;
+		}
+		public void MoveMuscle(float force)
+		{
+			Vector3 direction1 = upper.transform.position - lower.transform.position;
+			direction1.Normalize();
+			direction1 = direction1 * force;
+			Vector3 direction2 = -direction1;
+			upper.AddForce(direction2 * Time.deltaTime);
+			lower.AddForce(direction1 * Time.deltaTime);
+		}
+	}
+
 }
