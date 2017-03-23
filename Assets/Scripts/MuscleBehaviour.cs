@@ -126,8 +126,15 @@ public class MuscleBehaviour : MonoBehaviour
         MoveAdductor(x15, "left_front");
         MoveAdductor(x16, "left_back");	
 	*/
-	rightFrontChest.MoveMuscle(a1);
-	rightFrontHamstring.MoveMuscle(w1);
+	MoveHip(a1, "right_front");
+        MoveHip(a1, "right_back");
+        MoveHip(a1, "left_front");
+        MoveHip(a1, "left_back");
+
+	MoveAnkle(w1, "right_front");
+        MoveAnkle(w1, "right_back");
+        MoveAnkle(w1, "left_front");
+        MoveAnkle(w1, "left_back");
     }
 
     private void MoveHip(float force, string side)
