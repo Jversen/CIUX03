@@ -34,6 +34,9 @@ public class PIDControl : MonoBehaviour {
 
 		inVal = body.rotation.x;
 		previousInVal = inVal;
+
+		leftMuscle = new Muscle(legLeftMusclePoint, footLeftMusclePoint);
+		leftMuscle = new Muscle(legRightMusclePoint, footRightMusclePoint);
 	}
 
 	// Update is called once per frame
