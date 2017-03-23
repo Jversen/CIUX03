@@ -11,6 +11,7 @@ public class PIDControl : MonoBehaviour {
 	public float kp;
 	public float ki;
 	public double kd;
+	public int mfConstant; //Muscle force constant
 
 	private double inVal;
 	private double inVal2;
@@ -41,9 +42,9 @@ public class PIDControl : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-	     legLeftMuscle.MoveMuscle(kp);
-	     legRightMuscle.MoveMuscle(ki);
-		/*
+	     //legLeftMuscle.MoveMuscle(kp);
+	     //legRightMuscle.MoveMuscle(ki);
+
 		inVal = body.rotation.x;
 		inVal2 = body.rotation.z;
 		double error = targetVal - inVal;
@@ -55,12 +56,16 @@ public class PIDControl : MonoBehaviour {
 		outVal = pidFunction (error, Time.deltaTime) - derivative * 20;
 		outVal2 = pidFunction (error2, Time.deltaTime) - derivative2 * 20;
 
-
-		body.AddRelativeForce(body.transform.forward * (float) outVal + body.transform.right * (float) -outVal2);
+		if (inVal >= 0) {
+			legLeftMuscle.MoveMuscle (-mfConstant * (float)outVal);
+		} else {
+			legRightMuscle.MoveMuscle (mfConstant * (float)outVal);
+		}
+			//body.AddRelativeForce(body.transform.forward * (float) outVal + body.transform.right * (float) -outVal2);
 		//body.AddRelativeForce(body.transform.right * (float) -outVal2);
 		previousInVal = inVal;
 		previousInVal2 = inVal2;
-		*/
+
 	}
 
 	private double pidFunction(double parameter, double deltaTime){
