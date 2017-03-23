@@ -1,4 +1,4 @@
-﻿﻿using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,8 +8,10 @@ public class PIDControl : MonoBehaviour {
 	public Rigidbody legLeftMusclePoint, footLeftMusclePoint, legRightMusclePoint, footRightMusclePoint;
 	private Muscle legLeftMuscle, legRightMuscle;
 
-	public float kp;
-	public float ki;
+	public float force;
+
+	public double kp;
+	public double ki;
 	public double kd;
 
 	private double inVal;
@@ -41,6 +43,8 @@ public class PIDControl : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
+
+	     
 	     legLeftMuscle.MoveMuscle(kp);
 	     legRightMuscle.MoveMuscle(ki);
 		/*
