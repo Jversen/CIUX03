@@ -1,4 +1,4 @@
-﻿﻿using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
  
@@ -24,7 +24,7 @@ public class PIDControl : MonoBehaviour {
 	    private double lastOutVal;
 	    private double errSum;
 	 
-	    private int targetVal;
+	    public int targetVal;
 	 
 	    // Use this for initialization
 	    void Start () {
@@ -32,11 +32,8 @@ public class PIDControl : MonoBehaviour {
 		        ki = 0;
 		        kd = 0;
 		 
-		        targetVal = 0;
-		 
 		        inVal = body.rotation.x;
 		        previousInVal = inVal;
-		 
 		        legWestMuscle = new Muscle(legWestMusclePoint, footWestMusclePoint);
 		        legEastMuscle = new Muscle(legEastMusclePoint, footEastMusclePoint);
 		        legSouthMuscle = new Muscle(legSouthMusclePoint, footSouthMusclePoint);
