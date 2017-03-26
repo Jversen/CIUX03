@@ -24,35 +24,25 @@ public class RandomCharacter : MonoBehaviour
     private GameObject leftArm;
     private GameObject rightArm;
 
-    // Joints
-    Joint headJoint;
-    Joint leftLegJoint;
-    Joint rightLegJoint;
-    Joint leftArmJoint;
-    Joint rightArmJoint;
-
     void Start()
     {
         chest = InstantiateBodyPart(RandomPrefab("Prefabs/Body Parts/Chests"), transform);
         head = InstantiateBodyPart(RandomPrefab("Prefabs/Body Parts/Heads"), chest.transform);
-        //leftLeg = InstantiateBodyPart(RandomPrefab("Prefabs/Body Parts/Legs Left"), chest.transform);
-        //rightLeg = InstantiateBodyPart(RandomPrefab("Prefabs/Body Parts/Legs Right"), chest.transform);
-        //leftArm = InstantiateBodyPart(RandomPrefab("Prefabs/Body Parts/Arms Left"), chest.transform);
-        //rightArm = InstantiateBodyPart(RandomPrefab("Prefabs/Body Parts/Arms Right"), chest.transform);
+        leftLeg = InstantiateBodyPart(RandomPrefab("Prefabs/Body Parts/Legs Left"), chest.transform);
+        rightLeg = InstantiateBodyPart(RandomPrefab("Prefabs/Body Parts/Legs Right"), chest.transform);
+        leftArm = InstantiateBodyPart(RandomPrefab("Prefabs/Body Parts/Arms Left"), chest.transform);
+        rightArm = InstantiateBodyPart(RandomPrefab("Prefabs/Body Parts/Arms Right"), chest.transform);
 
         chest.transform.localPosition = Vector3.zero;
 
-        //headJoint = head.GetComponent<Joint>();
-        //leftLegJoint = leftLeg.GetComponent<Joint>();
-        //rightLegJoint = rightLeg.GetComponent<Joint>();
-        //leftArmJoint = leftArm.GetComponent<Joint>();
-        //rightArmJoint = rightArm.GetComponent<Joint>();
-
         attach(head, chest, chest.transform.Find("Head Socket"));
-        //attachJoint(leftLegJoint, chest, chest.transform.Find("Left Leg Socket"));
-        //attachJoint(rightLegJoint, chest, chest.transform.Find("Right Leg Socket"));
-        //attachJoint(leftArmJoint, chest, chest.transform.Find("Left Arm Socket"));
-        //attachJoint(rightArmJoint, chest, chest.transform.Find("Right Arm Socket"));
+        attach(leftLeg, chest, chest.transform.Find("Left Leg Socket"));
+        attach(rightLeg, chest, chest.transform.Find("Right Leg Socket"));
+        attach(leftArm, chest, chest.transform.Find("Left Arm Socket"));
+        attach(rightArm, chest, chest.transform.Find("Right Arm Socket"));
+
+        // Freeze chest position for testing
+        //chest.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePositionY;
     }
 
     void Update()
@@ -76,11 +66,11 @@ public class RandomCharacter : MonoBehaviour
     private void attach(GameObject objectToAttach, GameObject attachToObject, Transform attachToTransform)
     {
         Joint joint = objectToAttach.GetComponent<Joint>();
+        joint.connectedBody = attachToObject.GetComponent<Rigidbody>();
+        joint.autoConfigureConnectedAnchor = false;
+        joint.connectedAnchor = attachToTransform.localPosition;
 
         objectToAttach.transform.localPosition = attachToTransform.localPosition - joint.anchor / 2;
-
-        joint.connectedBody = attachToObject.GetComponent<Rigidbody>();
-        joint.connectedAnchor = transform.localPosition;
     }
 
 }
