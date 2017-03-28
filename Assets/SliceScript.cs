@@ -20,13 +20,17 @@ public class SliceScript : MonoBehaviour {
 		if (collide) {
 
 			//TODO: Cut is not currently in the right angle or position
-			Renderer renderer = gameObject.GetComponent<Renderer> ();
-			Vector3 contactPoint = col.contacts [0].normal;
-			Vector3 contactDirection = transform.position - contactPoint;
+			Vector3 contactPoint = new Vector3(0, 0, 0);
+			int nbrOfContacts = col.contacts.Length;
+			for (int i = 0; i < nbrOfContacts; i++) {
+				contactPoint = contactPoint + col.contacts [i].point;
+			}
+			contactPoint = new Vector3 (contactPoint.x / nbrOfContacts, contactPoint.y / nbrOfContacts, contactPoint.z / nbrOfContacts);
 
 			//Make the cut
-			Material material = renderer.material;
-			GameObject[] pieces = BLINDED_AM_ME.MeshCut.Cut (gameObject, transform.position, contactDirection, material);
+			//col.rigidbody.transform.up = perpendicular to sword => cuts the plane parallel to the sword
+			Material material = gameObject.GetComponent<Renderer> ().material;
+			GameObject[] pieces = BLINDED_AM_ME.MeshCut.Cut (gameObject, contactPoint, col.rigidbody.transform.up, material);
 
 			//pieces[0] is the original object, pieces[0] is the new, sliced of piece
 			GameObject newPiece = pieces [1];
