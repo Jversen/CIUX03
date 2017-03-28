@@ -17,7 +17,7 @@ public class SliceScript : MonoBehaviour {
 	}
 
 	void OnCollisionEnter(Collision col){
-		if (collide) {
+		if (collide && col.rigidbody != null) {
 
 			//TODO: Cut is not currently in the right angle or position
 			Vector3 contactPoint = new Vector3(0, 0, 0);
