@@ -30,21 +30,16 @@ public class SliceScript : MonoBehaviour {
 			//Make the cut
 			//col.rigidbody.transform.up = perpendicular to sword => cuts the plane parallel to the sword
 			Material material = gameObject.GetComponent<Renderer> ().material;
-			GameObject[] pieces = BLINDED_AM_ME.MeshCut.Cut (gameObject, contactPoint, col.rigidbody.transform.up, material);
+			GameObject[] pieces = BLINDED_AM_ME.MeshCut.Cut (gameObject, contactPoint, col.gameObject.transform.up, material);
 
-			//pieces[0] is the original object, pieces[0] is the new, sliced of piece
-			GameObject newPiece = pieces [1];
-			//Add rigidbody and collider to sliced of piece
-			newPiece.AddComponent<Rigidbody> ();
-			newPiece.AddComponent<BoxCollider> ();
-
-			//Resize both box colliders to fit pieces
-			for (int i = 0; i < 2; i++) {
-				BoxCollider collider = (BoxCollider)pieces [i].GetComponent<Collider> ();
-				Bounds bounds = pieces [i].GetComponent<Renderer> ().bounds;
-				collider.center = bounds.center - pieces [i].transform.position;
-				collider.size = bounds.size;
-			}
+			//pieces[0] is the original object, pieces[1] is the new, sliced of piece
+			Destroy (pieces [0].GetComponent < BoxCollider> ());
+			pieces [0].AddComponent<MeshCollider> ();
+			pieces [0].GetComponent<MeshCollider> ().convex = true;
+			pieces [1].transform.localScale = gameObject.transform.localScale;
+			pieces [1].AddComponent<MeshCollider> ();
+			pieces [1].GetComponent<MeshCollider> ().convex = true;
+			pieces [1].AddComponent<Rigidbody> ();
 			collide = false;
 		}
 	}
