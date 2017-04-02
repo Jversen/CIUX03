@@ -37,11 +37,33 @@ public class RandomCharacter : MonoBehaviour
 
         chest.transform.localPosition = Vector3.zero;
 
-        attach(head, chest, chest.transform.Find("Head Socket"));
-        attach(leftArm, chest, chest.transform.Find("Left Arm Socket"));
-        attach(rightArm, chest, chest.transform.Find("Right Arm Socket"));
-        attach(leftLeg, chest, chest.transform.Find("Left Leg Socket"));
-        attach(rightLeg, chest, chest.transform.Find("Right Leg Socket"));
+        if (chest != null)
+        {
+            if (head != null)
+            {
+                attach(head, chest, chest.transform.Find("Head Socket"));
+            }
+
+            if (leftArm != null)
+            {
+                attach(leftArm, chest, chest.transform.Find("Left Arm Socket"));
+            }
+
+            if (rightArm != null)
+            {
+                attach(rightArm, chest, chest.transform.Find("Right Arm Socket"));
+            }
+
+            if (leftLeg != null)
+            {
+                attach(leftLeg, chest, chest.transform.Find("Left Leg Socket"));
+            }
+
+            if (rightLeg != null)
+            {
+                attach(rightLeg, chest, chest.transform.Find("Right Leg Socket"));
+            }
+        }
         // Freeze chest position for testing
         //chest.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePositionY;
     }
@@ -59,6 +81,10 @@ public class RandomCharacter : MonoBehaviour
 
     private GameObject InstantiateBodyPart(Object bodyPart, Transform transform)
     {
+        if (bodyPart == null)
+        {
+            return null;
+        }
         GameObject bodyPartInst = Instantiate((GameObject)bodyPart);
         bodyPartInst.transform.parent = transform;
         return bodyPartInst;
