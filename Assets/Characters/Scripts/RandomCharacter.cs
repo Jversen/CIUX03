@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class RandomCharacter : MonoBehaviour
 {
-    enum BodyParts { Chest, Head, LeftArm, RightArm, LeftLeg, RightLeg };
+    enum BodyParts { Chest, Head, LeftUpperArm, RightUpperArm, LeftLowerArm, RightLowerArm, LeftHand, RightHand, LeftUpperLeg, RightUpperLeg, LeftLowerLeg, RightLowerLeg, LeftFoot, RightFoot };
 
     private Object chestPrefab;
     private Object headPrefab;
@@ -30,10 +30,10 @@ public class RandomCharacter : MonoBehaviour
 
         chest = InstantiateBodyPart(LoadRandomBodyPart(BodyParts.Chest), transform);
         head = InstantiateBodyPart(LoadRandomBodyPart(BodyParts.Head), chest.transform);
-        leftArm = InstantiateBodyPart(LoadRandomBodyPart(BodyParts.LeftArm), chest.transform);
-        rightArm = InstantiateBodyPart(LoadRandomBodyPart(BodyParts.RightArm), chest.transform);
-        leftLeg = InstantiateBodyPart(LoadRandomBodyPart(BodyParts.LeftLeg), chest.transform);
-        rightLeg = InstantiateBodyPart(LoadRandomBodyPart(BodyParts.RightLeg), chest.transform);
+        leftArm = InstantiateBodyPart(LoadRandomBodyPart(BodyParts.LeftUpperArm), chest.transform);
+        rightArm = InstantiateBodyPart(LoadRandomBodyPart(BodyParts.RightUpperArm), chest.transform);
+        leftLeg = InstantiateBodyPart(LoadRandomBodyPart(BodyParts.LeftUpperLeg), chest.transform);
+        rightLeg = InstantiateBodyPart(LoadRandomBodyPart(BodyParts.RightUpperLeg), chest.transform);
 
         chest.transform.localPosition = Vector3.zero;
 

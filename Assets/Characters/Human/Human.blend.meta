@@ -17,6 +17,9 @@ ModelImporter:
     100018: RightLowerArm
     100020: RightUpperArm
     100022: RightHand
+    100024: RightFoot
+    100026: RightLowerLeg
+    100028: RightUpperLeg
     400000: Chest
     400002: Head
     400004: //RootNode
@@ -29,6 +32,9 @@ ModelImporter:
     400018: RightLowerArm
     400020: RightUpperArm
     400022: RightHand
+    400024: RightFoot
+    400026: RightLowerLeg
+    400028: RightUpperLeg
     2300000: Chest
     2300002: Head
     2300004: LeftFoot
@@ -40,6 +46,9 @@ ModelImporter:
     2300016: RightLowerArm
     2300018: RightUpperArm
     2300020: RightHand
+    2300022: RightFoot
+    2300024: RightLowerLeg
+    2300026: RightUpperLeg
     3300000: Chest
     3300002: Head
     3300004: LeftFoot
@@ -51,6 +60,9 @@ ModelImporter:
     3300016: RightLowerArm
     3300018: RightUpperArm
     3300020: RightHand
+    3300022: RightFoot
+    3300024: RightLowerLeg
+    3300026: RightUpperLeg
     4300000: LeftHand
     4300002: LeftLowerArm
     4300004: LeftUpperArm
@@ -62,6 +74,9 @@ ModelImporter:
     4300016: RightLowerArm
     4300018: RightUpperArm
     4300020: RightHand
+    4300022: RightFoot
+    4300024: RightLowerLeg
+    4300026: RightUpperLeg
     7400000: Default Take
     9500000: //RootNode
   materials:
