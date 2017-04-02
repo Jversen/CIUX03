@@ -14,10 +14,16 @@ public class RandomCharacter : MonoBehaviour
     private GameObject head;
     private GameObject leftUpperArm;
     private GameObject rightUpperArm;
+    private GameObject leftLowerArm;
+    private GameObject rightLowerArm;
+    private GameObject leftHand;
+    private GameObject rightHand;
     private GameObject leftUpperLeg;
     private GameObject rightUpperLeg;
     private GameObject leftLowerLeg;
     private GameObject rightLowerLeg;
+    private GameObject leftFoot;
+    private GameObject rightFoot;
 
     void Start()
     {
@@ -28,20 +34,32 @@ public class RandomCharacter : MonoBehaviour
         head = InstantiateBodyPart(LoadRandomBodyPart(BodyParts.Head), chest);
         leftUpperArm = InstantiateBodyPart(LoadRandomBodyPart(BodyParts.LeftUpperArm), chest);
         rightUpperArm = InstantiateBodyPart(LoadRandomBodyPart(BodyParts.RightUpperArm), chest);
+        leftLowerArm = InstantiateBodyPart(LoadRandomBodyPart(BodyParts.LeftLowerArm), leftUpperArm);
+        rightLowerArm = InstantiateBodyPart(LoadRandomBodyPart(BodyParts.RightLowerArm), rightUpperArm);
+        leftHand = InstantiateBodyPart(LoadRandomBodyPart(BodyParts.LeftHand), leftLowerArm);
+        rightHand = InstantiateBodyPart(LoadRandomBodyPart(BodyParts.RightHand), rightLowerArm);
         leftUpperLeg = InstantiateBodyPart(LoadRandomBodyPart(BodyParts.LeftUpperLeg), chest);
         rightUpperLeg = InstantiateBodyPart(LoadRandomBodyPart(BodyParts.RightUpperLeg), chest);
         leftLowerLeg = InstantiateBodyPart(LoadRandomBodyPart(BodyParts.LeftLowerLeg), leftUpperLeg);
         rightLowerLeg = InstantiateBodyPart(LoadRandomBodyPart(BodyParts.RightLowerLeg), rightUpperLeg);
+        leftFoot = InstantiateBodyPart(LoadRandomBodyPart(BodyParts.LeftFoot), leftLowerLeg);
+        rightFoot = InstantiateBodyPart(LoadRandomBodyPart(BodyParts.RightFoot), rightLowerLeg);
 
         chest.transform.localPosition = Vector3.zero;
 
         attach(head, chest, chest.transform.Find("Head Socket"));
         attach(leftUpperArm, chest, chest.transform.Find("Left Arm Socket"));
         attach(rightUpperArm, chest, chest.transform.Find("Right Arm Socket"));
+        attach(leftLowerArm, leftUpperArm, leftUpperArm.transform.Find("Lower Arm Socket"));
+        attach(rightLowerArm, rightUpperArm, rightUpperArm.transform.Find("Lower Arm Socket"));
+        attach(leftHand, leftLowerArm, leftLowerArm.transform.Find("Hand Socket"));
+        attach(rightHand, rightLowerArm, rightLowerArm.transform.Find("Hand Socket"));
         attach(leftUpperLeg, chest, chest.transform.Find("Left Leg Socket"));
         attach(rightUpperLeg, chest, chest.transform.Find("Right Leg Socket"));
         attach(leftLowerLeg, leftUpperLeg, leftUpperLeg.transform.Find("Lower Leg Socket"));
         attach(rightLowerLeg, rightUpperLeg, rightUpperLeg.transform.Find("Lower Leg Socket"));
+        attach(leftFoot, leftLowerLeg, leftLowerLeg.transform.Find("Foot Socket"));
+        attach(rightFoot, rightLowerLeg, rightLowerLeg.transform.Find("Foot Socket"));
 
         // Freeze chest position for testing
         //chest.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePositionY;
