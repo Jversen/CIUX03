@@ -4,18 +4,30 @@ using UnityEngine;
 
 public class SkeletonMuscles : MonoBehaviour {
 	public Rigidbody leftLowerHamstring, leftUpperHamstring, rightLowerHamstring, rightUpperHamstring;
+	public Rigidbody leftLowerGluteus, leftUpperGluteus, rightLowerGluteus, rightUpperGluteus;
+	public Rigidbody leftLowerHip, leftUpperHip, rightLowerHip, rightUpperHip;
 	public Muscle leftHamstring, rightHamstring;
-	public float force;
+	public Muscle leftGluteus, rightGluteus;
+	public Muscle leftHip, rightHip;
+	public float forceHamstring, forceGluteus, forceHip;
 	// Use this for initialization
 	void Start () {
 		leftHamstring = new Muscle (leftUpperHamstring, leftLowerHamstring);
 		rightHamstring = new Muscle (rightUpperHamstring, rightLowerHamstring);
+		leftGluteus = new Muscle (leftUpperGluteus, leftLowerGluteus);
+		rightGluteus = new Muscle (rightUpperGluteus, rightLowerGluteus);
+		leftHip = new Muscle (leftUpperHip, leftLowerHip);
+		rightHip = new Muscle (rightUpperHip, rightLowerHip);
 	}
 	
 	// Update is called once per frame
-	void Update () {
-		leftHamstring.MoveMuscle (force);
-		rightHamstring.MoveMuscle (force);
+	void FixedUpdate () {
+		leftHamstring.MoveMuscle (forceHamstring);
+		rightHamstring.MoveMuscle (forceHamstring);
+		leftGluteus.MoveMuscle (forceGluteus);
+		rightGluteus.MoveMuscle (forceGluteus);
+		leftHip.MoveMuscle (forceHip);
+		rightHip.MoveMuscle (forceHip);
 	}
 	public class Muscle{
 		private Rigidbody upper, lower;
