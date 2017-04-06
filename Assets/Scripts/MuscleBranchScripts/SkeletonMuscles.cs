@@ -6,10 +6,14 @@ public class SkeletonMuscles : MonoBehaviour {
 	public Rigidbody leftLowerHamstring, leftUpperHamstring, rightLowerHamstring, rightUpperHamstring;
 	public Rigidbody leftLowerGluteus, leftUpperGluteus, rightLowerGluteus, rightUpperGluteus;
 	public Rigidbody leftLowerHip, leftUpperHip, rightLowerHip, rightUpperHip;
+	public Rigidbody lowerAbs, upperAbs;
+	public Rigidbody lowerBack, upperBack;
 	public Muscle leftHamstring, rightHamstring;
 	public Muscle leftGluteus, rightGluteus;
 	public Muscle leftHip, rightHip;
-	public float forceHamstring, forceGluteus, forceHip;
+	public Muscle abs;
+	public Muscle back;
+	public float forceHamstring, forceGluteus, forceHip, forceAbs, forceBack;
 	// Use this for initialization
 	void Start () {
 		leftHamstring = new Muscle (leftUpperHamstring, leftLowerHamstring);
@@ -18,6 +22,8 @@ public class SkeletonMuscles : MonoBehaviour {
 		rightGluteus = new Muscle (rightUpperGluteus, rightLowerGluteus);
 		leftHip = new Muscle (leftUpperHip, leftLowerHip);
 		rightHip = new Muscle (rightUpperHip, rightLowerHip);
+		abs = new Muscle (upperAbs, lowerAbs);
+		back = new Muscle (upperBack, lowerBack);
 	}
 	
 	// Update is called once per frame
@@ -28,6 +34,8 @@ public class SkeletonMuscles : MonoBehaviour {
 		rightGluteus.MoveMuscle (forceGluteus);
 		leftHip.MoveMuscle (forceHip);
 		rightHip.MoveMuscle (forceHip);
+		abs.MoveMuscle (forceAbs);
+		back.MoveMuscle (forceBack);
 	}
 	public class Muscle{
 		private Rigidbody upper, lower;
