@@ -15,9 +15,11 @@ public class JointDestroyer : MonoBehaviour {
 	}
 
 	void OnCollisionEnter(Collision col){
-		Joint joint = gameObject.GetComponent<CharacterJoint> ();
-		if (joint != null) {
-			Destroy (joint);
+		Joint[] joints = gameObject.GetComponents<CharacterJoint> ();
+		if (joints != null && joints.Length > 0) {
+			foreach (Joint joint in joints) {
+				Destroy (joint);
+			}
 		}
 	}
 }
