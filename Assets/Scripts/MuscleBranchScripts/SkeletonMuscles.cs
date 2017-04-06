@@ -13,7 +13,12 @@ public class SkeletonMuscles : MonoBehaviour {
 	public Muscle leftHip, rightHip;
 	public Muscle abs;
 	public Muscle back;
+	public Rigidbody leftFoot, rightFoot, ;
 	public float forceHamstring, forceGluteus, forceHip, forceAbs, forceBack;
+	private bool leftFootContact = false; 
+	private bool rightFootContact = false;
+	private Vector3 leftFootCoG, rightFootCoG, bodyCoG, betweenFeetVector, leftToBodyCoG, rightToBodyCoG, leftFootGoalCoG, rightFootGoalCoG;
+	private float feetDistance, balanceLineDistance;
 	// Use this for initialization
 	void Start () {
 		leftHamstring = new Muscle (leftUpperHamstring, leftLowerHamstring);
@@ -28,6 +33,7 @@ public class SkeletonMuscles : MonoBehaviour {
 	
 	// Update is called once per frame
 	void FixedUpdate () {
+
 		leftHamstring.MoveMuscle (forceHamstring);
 		rightHamstring.MoveMuscle (forceHamstring);
 		leftGluteus.MoveMuscle (forceGluteus);
@@ -36,6 +42,42 @@ public class SkeletonMuscles : MonoBehaviour {
 		rightHip.MoveMuscle (forceHip);
 		abs.MoveMuscle (forceAbs);
 		back.MoveMuscle (forceBack);
+	}
+	void OnCollisionEnter(Collision coll){
+		print ("Entered OnCollisionEnter");
+		if (coll.contacts[0].thisCollider.gameObject.CompareTag("Ground")){
+			if (coll.contacts [1].thisCollider.gameObject.CompareTag ("LeftFoot")) {
+				leftFootContact = true; 
+			} else if (coll.contacts [1].thisCollider.gameObject.CompareTag ("RightFoot")) {
+				rightFootContact = true;
+			}
+		} else if (coll.contacts[1].thisCollider.gameObject.CompareTag("Ground")){
+			if (coll.contacts [0].thisCollider.gameObject.CompareTag ("LeftFoot")) {
+				leftFootContact = true; 
+			} else if (coll.contacts [0].thisCollider.gameObject.CompareTag ("RightFoot")) {
+				rightFootContact = true;
+			}
+		}
+		print ("right foot: " + rightFootContact);
+		print ("left foot: " + leftFootContact);
+	}
+	void OnCollisionExit(Collision coll){
+		print ("Entered OnCollisionExit");
+		if (coll.contacts[0].thisCollider.gameObject.CompareTag("Ground")){
+			if (coll.contacts [1].thisCollider.gameObject.CompareTag ("LeftFoot")) {
+				leftFootContact = false; 
+			} else if (coll.contacts [1].thisCollider.gameObject.CompareTag ("RightFoot")) {
+				rightFootContact = false;
+			}
+		} else if (coll.contacts[1].thisCollider.gameObject.CompareTag("Ground")){
+			if (coll.contacts [0].thisCollider.gameObject.CompareTag ("LeftFoot")) {
+				leftFootContact = false; 
+			} else if (coll.contacts [0].thisCollider.gameObject.CompareTag ("RightFoot")) {
+				rightFootContact = false;
+			}
+		}
+		print ("right foot: " + rightFootContact);
+		print ("left foot: " + leftFootContact);
 	}
 	public class Muscle{
 		private Rigidbody upper, lower;
