@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 008786fe05866ff41a23b08aafcb8186
-timeCreated: 1491323185
+timeCreated: 1492157527
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
@@ -20,6 +20,20 @@ ModelImporter:
     100024: RightLowerLeg
     100026: RightUpperArm
     100028: RightUpperLeg
+    100030: Chest_001
+    100032: Head_001
+    100034: LeftFoot_001
+    100036: LeftHand_001
+    100038: LeftLowerArm_001
+    100040: LeftLowerLeg_001
+    100042: LeftUpperArm_001
+    100044: LeftUpperLeg_001
+    100046: RightFoot_001
+    100048: RightHand_001
+    100050: RightLowerArm_001
+    100052: RightLowerLeg_001
+    100054: RightUpperArm_001
+    100056: RightUpperLeg_001
     400000: Chest
     400002: Head
     400004: //RootNode
@@ -35,6 +49,20 @@ ModelImporter:
     400024: RightLowerLeg
     400026: RightUpperArm
     400028: RightUpperLeg
+    400030: Chest_001
+    400032: Head_001
+    400034: LeftFoot_001
+    400036: LeftHand_001
+    400038: LeftLowerArm_001
+    400040: LeftLowerLeg_001
+    400042: LeftUpperArm_001
+    400044: LeftUpperLeg_001
+    400046: RightFoot_001
+    400048: RightHand_001
+    400050: RightLowerArm_001
+    400052: RightLowerLeg_001
+    400054: RightUpperArm_001
+    400056: RightUpperLeg_001
     2300000: Chest
     2300002: Head
     2300004: LeftFoot
@@ -49,6 +77,20 @@ ModelImporter:
     2300022: RightLowerLeg
     2300024: RightUpperArm
     2300026: RightUpperLeg
+    2300028: Chest_001
+    2300030: Head_001
+    2300032: LeftFoot_001
+    2300034: LeftHand_001
+    2300036: LeftLowerArm_001
+    2300038: LeftLowerLeg_001
+    2300040: LeftUpperArm_001
+    2300042: LeftUpperLeg_001
+    2300044: RightFoot_001
+    2300046: RightHand_001
+    2300048: RightLowerArm_001
+    2300050: RightLowerLeg_001
+    2300052: RightUpperArm_001
+    2300054: RightUpperLeg_001
     3300000: Chest
     3300002: Head
     3300004: LeftFoot
@@ -63,6 +105,20 @@ ModelImporter:
     3300022: RightLowerLeg
     3300024: RightUpperArm
     3300026: RightUpperLeg
+    3300028: Chest_001
+    3300030: Head_001
+    3300032: LeftFoot_001
+    3300034: LeftHand_001
+    3300036: LeftLowerArm_001
+    3300038: LeftLowerLeg_001
+    3300040: LeftUpperArm_001
+    3300042: LeftUpperLeg_001
+    3300044: RightFoot_001
+    3300046: RightHand_001
+    3300048: RightLowerArm_001
+    3300050: RightLowerLeg_001
+    3300052: RightUpperArm_001
+    3300054: RightUpperLeg_001
     4300000: RightFoot
     4300002: RightLowerLeg
     4300004: RightUpperLeg
@@ -77,6 +133,20 @@ ModelImporter:
     4300022: LeftUpperLeg
     4300024: LeftLowerLeg
     4300026: LeftFoot
+    4300028: LeftFoot_001
+    4300030: LeftLowerLeg_001
+    4300032: LeftUpperLeg_001
+    4300034: Chest_001
+    4300036: Head_001
+    4300038: LeftUpperArm_001
+    4300040: LeftLowerArm_001
+    4300042: LeftHand_001
+    4300044: RightUpperArm_001
+    4300046: RightLowerArm_001
+    4300048: RightHand_001
+    4300050: RightUpperLeg_001
+    4300052: RightLowerLeg_001
+    4300054: RightFoot_001
     7400000: Default Take
     9500000: //RootNode
   materials:
@@ -89,6 +159,8 @@ ModelImporter:
     resampleCurves: 1
     optimizeGameObjects: 0
     motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
     animationImportErrors: 
     animationImportWarnings: 
     animationRetargetingWarnings: 
