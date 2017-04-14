@@ -50,16 +50,16 @@ public class RandomCharacter : MonoBehaviour
         attach(head, chest, chest.transform.Find("Head Socket"));
         attach(leftUpperArm, chest, chest.transform.Find("Left Arm Socket"));
         attach(rightUpperArm, chest, chest.transform.Find("Right Arm Socket"));
-        attach(leftLowerArm, leftUpperArm, leftUpperArm.transform.Find("Lower Arm Socket"));
-        attach(rightLowerArm, rightUpperArm, rightUpperArm.transform.Find("Lower Arm Socket"));
-        attach(leftHand, leftLowerArm, leftLowerArm.transform.Find("Hand Socket"));
-        attach(rightHand, rightLowerArm, rightLowerArm.transform.Find("Hand Socket"));
-        attach(leftUpperLeg, chest, chest.transform.Find("Left Leg Socket"));
-        attach(rightUpperLeg, chest, chest.transform.Find("Right Leg Socket"));
-        attach(leftLowerLeg, leftUpperLeg, leftUpperLeg.transform.Find("Lower Leg Socket"));
-        attach(rightLowerLeg, rightUpperLeg, rightUpperLeg.transform.Find("Lower Leg Socket"));
-        attach(leftFoot, leftLowerLeg, leftLowerLeg.transform.Find("Foot Socket"));
-        attach(rightFoot, rightLowerLeg, rightLowerLeg.transform.Find("Foot Socket"));
+        attachSliceable(leftLowerArm, leftUpperArm, leftUpperArm.transform.Find("Lower Arm Socket"));
+		attachSliceable(rightLowerArm, rightUpperArm, rightUpperArm.transform.Find("Lower Arm Socket"));
+		attachSliceable(leftHand, leftLowerArm, leftLowerArm.transform.Find("Hand Socket"));
+		attachSliceable(rightHand, rightLowerArm, rightLowerArm.transform.Find("Hand Socket"));
+		attach(leftUpperLeg, chest, chest.transform.Find("Left Leg Socket"));
+		attach(rightUpperLeg, chest, chest.transform.Find("Right Leg Socket"));
+		attachSliceable(leftLowerLeg, leftUpperLeg, leftUpperLeg.transform.Find("Lower Leg Socket"));
+		attachSliceable(rightLowerLeg, rightUpperLeg, rightUpperLeg.transform.Find("Lower Leg Socket"));
+		attachSliceable(leftFoot, leftLowerLeg, leftLowerLeg.transform.Find("Foot Socket"));
+		attachSliceable(rightFoot, rightLowerLeg, rightLowerLeg.transform.Find("Foot Socket"));
 
         // Freeze chest position for testing
         //chest.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePositionY;
@@ -95,6 +95,13 @@ public class RandomCharacter : MonoBehaviour
         joint.connectedAnchor = attachToTransform.localPosition;
 
         objectToAttach.transform.localPosition = attachToTransform.localPosition - joint.anchor / 2;
-    }
+	}
 
+	private void attachSliceable(GameObject objectToAttach, GameObject attachToSliceable, Transform attachToTransform)
+	{
+		attach (objectToAttach, attachToSliceable, attachToTransform);
+		attachToSliceable.AddComponent<Sliceable> ();
+		attachToSliceable.AddComponent<JointDestroyerSliceable> ();
+		attachToSliceable.GetComponent<JointDestroyerSliceable> ().connector = objectToAttach;
+	}
 }
