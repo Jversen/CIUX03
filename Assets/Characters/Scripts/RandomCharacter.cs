@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class RandomCharacter : MonoBehaviour
 {
-    enum BodyParts { Chest, Head, LeftUpperArm, RightUpperArm, LeftLowerArm, RightLowerArm, LeftHand, RightHand, LeftUpperLeg, RightUpperLeg, LeftLowerLeg, RightLowerLeg, LeftFoot, RightFoot };
+    enum BodyParts { Chest, Head, LeftUpperArm, RightUpperArm, LeftLowerArm, RightLowerArm, LeftHand, RightHand, LeftUpperLeg, RightUpperLeg, LeftLowerLeg, RightLowerLeg, LeftFoot, RightFoot, Tail };
 
     // Body Parts
     private string charactersDir = "Prefabs/Characters/";
@@ -24,12 +24,14 @@ public class RandomCharacter : MonoBehaviour
     private GameObject rightLowerLeg;
     private GameObject leftFoot;
     private GameObject rightFoot;
+    private GameObject tail;
 
     void Start()
     {
         characterPath = Application.dataPath + "/Resources/" + charactersDir;
         characterDirs = Directory.GetDirectories(characterPath);
 
+        // Instantiate objects
         chest = InstantiateBodyPart(LoadRandomBodyPart(BodyParts.Chest), gameObject);
         head = InstantiateBodyPart(LoadRandomBodyPart(BodyParts.Head), chest);
         leftUpperArm = InstantiateBodyPart(LoadRandomBodyPart(BodyParts.LeftUpperArm), chest);
@@ -45,8 +47,15 @@ public class RandomCharacter : MonoBehaviour
         leftFoot = InstantiateBodyPart(LoadRandomBodyPart(BodyParts.LeftFoot), leftLowerLeg);
         rightFoot = InstantiateBodyPart(LoadRandomBodyPart(BodyParts.RightFoot), rightLowerLeg);
 
+        Object tailObj = LoadRandomBodyPart(BodyParts.Tail);
+        if (tailObj != null)
+        {
+            tail = InstantiateBodyPart(tailObj, chest);
+        }
+
         chest.transform.localPosition = Vector3.zero;
 
+        // Attach joints
         attach(head, chest, chest.transform.Find("Head Socket"));
         attach(leftUpperArm, chest, chest.transform.Find("Left Arm Socket"));
         attach(rightUpperArm, chest, chest.transform.Find("Right Arm Socket"));
@@ -60,6 +69,11 @@ public class RandomCharacter : MonoBehaviour
 		attachSliceable(rightLowerLeg, rightUpperLeg, rightUpperLeg.transform.Find("Lower Leg Socket"));
 		attachSliceable(leftFoot, leftLowerLeg, leftLowerLeg.transform.Find("Foot Socket"));
 		attachSliceable(rightFoot, rightLowerLeg, rightLowerLeg.transform.Find("Foot Socket"));
+
+        if (tail != null)
+        {
+            attach(tail, chest, chest.transform.Find("Tail Socket"));
+        }
 
         // Freeze chest position for testing
         //chest.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePositionY;
