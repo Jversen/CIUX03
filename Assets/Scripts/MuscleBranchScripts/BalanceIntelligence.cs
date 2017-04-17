@@ -44,7 +44,7 @@ public class BalanceIntelligence : MonoBehaviour {
 		betweenFeetVector = leftFootCoG - rightFootCoG;
 
 		bodyCoG = getCenterOfGravity (bodyCore);
-		bodyCoGToFeetVector = bodyCoG - getOrthogonalProjection(betweenFeetVector, bodyCoG); //distance y - ŷ, bodyCoG vector minus its projection on betweenFeetVector
+		bodyCoGToFeetVector = bodyCoG - getOrthogonalProjection(bodyCoG, betweenFeetVector); //distance y - ŷ, bodyCoG vector minus its projection on betweenFeetVector
 		leftFootCoGToBodyCoG = leftFootCoG - bodyCoG;
 		rightFootCoGToBodyCoG = rightFootCoG - bodyCoG;
 
