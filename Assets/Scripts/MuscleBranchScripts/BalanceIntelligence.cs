@@ -108,7 +108,9 @@ public class BalanceIntelligence : MonoBehaviour {
 	/* Is the body's center of gravity inside the feet's support polygon?*/
 	bool IsBodySupported(){
 		
-		if (Mathf.Abs(bodyCoGToFeetVector.magnitude) <= betweenFeetVectorToBodyCoGEpsilon){
+		//if (Mathf.Abs(bodyCoGToFeetVector.magnitude) <= betweenFeetVectorToBodyCoGEpsilon){
+		if(UnityEditor.HandleUtility.DistancePointLine(bodyCoG, GetCenterOfGravity(leftFoot), GetCenterOfGravity(rightFoot)) <= 
+			betweenFeetVectorToBodyCoGEpsilon){
 			return true;
 		} else {
 			return false;
@@ -117,7 +119,8 @@ public class BalanceIntelligence : MonoBehaviour {
 
 	//If body's center of gravity is outside the support polygon, calculate line between bodyCoG and closest foot CoG. Then place the foot furthest away on this line.
 	Vector3 TakeStep(Rigidbody moveFoot, Rigidbody stayFoot){
-		Vector3 goalPos = GetOrthogonalProjection(GetCenterOfGravity(moveFoot), (GetCenterOfGravity(stayFoot) - bodyCoG));  
+		//Vector3 goalPos = GetOrthogonalProjection(GetCenterOfGravity(moveFoot), (GetCenterOfGravity(stayFoot) - bodyCoG));  
+		Vector3 goalPos = bodyCoG + (bodyCoG - GetCenterOfGravity(stayFoot));
 		print ("goalPos: " + goalPos);
 		gizmoFromFoot = stayFoot.transform.position;
 		gizmoToFoot = goalPos;
@@ -133,6 +136,8 @@ public class BalanceIntelligence : MonoBehaviour {
 		Gizmos.color = Color.red;
 		Gizmos.DrawLine (leftFootCoG, rightFootCoG);
 		Gizmos.DrawSphere(bodyCoG, 0.1f);
+		Gizmos.color = Color.yellow;
+		Gizmos.DrawLine (Vector3.zero, bodyCoG);
 
 		if (bodyCoGToFeetVector != null) {
 			Gizmos.color = Color.cyan;
@@ -148,9 +153,9 @@ public class BalanceIntelligence : MonoBehaviour {
 
 		if (gizmoFromFoot != null && gizmoBodyCoG != null && gizmoToFoot != null) {
 			Gizmos.color = Color.blue;
-			Gizmos.DrawLine (gizmoFromFoot, gizmoBodyCoG);
+			Gizmos.DrawLine (new Vector3(gizmoFromFoot[0],0,gizmoFromFoot[2]), gizmoBodyCoG);
 			Gizmos.color = Color.white;
-			Gizmos.DrawLine (gizmoBodyCoG, GetOrthogonalProjection(gizmoToFoot, 10*(gizmoFromFoot - gizmoBodyCoG)));
+			Gizmos.DrawLine (gizmoBodyCoG, GetOrthogonalProjection(gizmoToFoot, 1*(gizmoFromFoot + gizmoBodyCoG)+bodyCoG));
 			Gizmos.color = Color.black;
 			Gizmos.DrawSphere(gizmoToFoot, 0.1f);
 			//Gizmos.DrawLine (gizmoBodyCoG, gizmoToFoot);
