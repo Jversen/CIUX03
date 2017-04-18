@@ -1,4 +1,4 @@
-﻿using UnityEditor;
+﻿/*using UnityEditor;
 using UnityEngine;
 [CustomEditor(typeof(Rigidbody))]
 public class RigidbodyEditor : Editor
@@ -19,4 +19,4 @@ public class RigidbodyEditor : Editor
 		GUI.skin = EditorGUIUtility.GetBuiltinSkin(UnityEditor.EditorSkin.Inspector);
 		DrawDefaultInspector();
 	}
-}
+}*/

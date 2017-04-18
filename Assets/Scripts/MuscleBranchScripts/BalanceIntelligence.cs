@@ -120,7 +120,7 @@ public class BalanceIntelligence : MonoBehaviour {
 		Vector3 goalPos = GetOrthogonalProjection(GetCenterOfGravity(moveFoot), (GetCenterOfGravity(stayFoot) - bodyCoG));  
 		print ("goalPos: " + goalPos);
 		gizmoFromFoot = stayFoot.transform.position;
-		gizmoToFoot = moveFoot.transform.position;
+		gizmoToFoot = goalPos;
 		gizmoBodyCoG = bodyCoG;
 		moveFoot.transform.position = new Vector3(goalPos[0], 0.5f, goalPos[2]); //instantly move foot to just above goalPos, make more realistic later
 
@@ -132,17 +132,28 @@ public class BalanceIntelligence : MonoBehaviour {
 	void OnDrawGizmos() {
 		Gizmos.color = Color.red;
 		Gizmos.DrawLine (leftFootCoG, rightFootCoG);
+		Gizmos.DrawSphere(bodyCoG, 0.1f);
 
 		if (bodyCoGToFeetVector != null) {
-			Gizmos.color = Color.black;
+			Gizmos.color = Color.cyan;
+			if (leftFootCoGToBodyCoG.magnitude > rightFootCoGToBodyCoG.magnitude) {
+				Gizmos.DrawLine (leftFootCoG, GetOrthogonalProjection (rightFootCoG, GetOrthogonalProjection (bodyCoG, betweenFeetVector)));
+			} else {
+				Gizmos.DrawLine (rightFootCoG, GetOrthogonalProjection (leftFootCoG, GetOrthogonalProjection (bodyCoG, betweenFeetVector)));
+			}
+			Gizmos.color = Color.magenta;
 			Gizmos.DrawLine (bodyCoG, GetOrthogonalProjection(bodyCoG, betweenFeetVector));
+
 		}
 
 		if (gizmoFromFoot != null && gizmoBodyCoG != null && gizmoToFoot != null) {
 			Gizmos.color = Color.blue;
 			Gizmos.DrawLine (gizmoFromFoot, gizmoBodyCoG);
+			Gizmos.color = Color.white;
+			Gizmos.DrawLine (gizmoBodyCoG, GetOrthogonalProjection(gizmoToFoot, 10*(gizmoFromFoot - gizmoBodyCoG)));
 			Gizmos.color = Color.black;
-			Gizmos.DrawLine (gizmoBodyCoG, gizmoToFoot);
+			Gizmos.DrawSphere(gizmoToFoot, 0.1f);
+			//Gizmos.DrawLine (gizmoBodyCoG, gizmoToFoot);
 		}
 
 	}
