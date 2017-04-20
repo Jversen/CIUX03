@@ -3,19 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class BalanceIntelligence : MonoBehaviour {
-	/*public Rigidbody leftLowerHamstring, leftUpperHamstring, rightLowerHamstring, rightUpperHamstring;
-	public Rigidbody leftLowerGluteus, leftUpperGluteus, rightLowerGluteus, rightUpperGluteus;
+	//public Rigidbody leftLowerHamstring, leftUpperHamstring, rightLowerHamstring, rightUpperHamstring;
+	//public Rigidbody leftLowerGluteus, leftUpperGluteus, rightLowerGluteus, rightUpperGluteus;
 	public Rigidbody leftLowerHip, leftUpperHip, rightLowerHip, rightUpperHip;
-	public Rigidbody lowerAbs, upperAbs;
-	public Rigidbody lowerBack, upperBack;
-	public Muscle leftHamstring, rightHamstring;
-	public Muscle leftGluteus, rightGluteus;
+	//public Rigidbody lowerAbs, upperAbs;
+	//public Rigidbody lowerBack, upperBack;
+	//public Muscle leftHamstring, rightHamstring;
+	//public Muscle leftGluteus, rightGluteus;
 	public Muscle leftHip, rightHip;
-	public Muscle abs;
-	public Muscle back;*/
-	public Rigidbody leftFoot, rightFoot, bodyCore;
-	public float betweenFeetVectorToBodyCoGEpsilon;
-	//public float forceHamstring, forceGluteus, forceHip, forceAbs, forceBack;
+	//public Muscle abs;
+	//public Muscle back;
+	public Rigidbody leftFoot, rightFoot, bodyCore, footGoalPos;
+	public float betweenFeetVectorToBodyCoGEpsilon, muscleForce;
+	public float forceHamstring, forceGluteus, forceHip, forceAbs, forceBack;
 	private bool leftFootContact = false; 
 	private bool rightFootContact = false;
 	private Vector3 leftFootCoG, rightFootCoG, bodyCoG, betweenFeetVector, leftFootCoGToBodyCoG, rightFootCoGToBodyCoG, leftFootGoalCoG, rightFootGoalCoG,
@@ -24,20 +24,28 @@ public class BalanceIntelligence : MonoBehaviour {
 
 	private Vector3 gizmoFromFoot, gizmoBodyCoG, gizmoToFoot; //For drawing gizmos for debug
 
+	private bool isWalking;
+
 	// Use this for initialization
 	void Start () {
-		/*leftHamstring = new Muscle (leftUpperHamstring, leftLowerHamstring);
-		rightHamstring = new Muscle (rightUpperHamstring, rightLowerHamstring);
-		leftGluteus = new Muscle (leftUpperGluteus, leftLowerGluteus);
-		rightGluteus = new Muscle (rightUpperGluteus, rightLowerGluteus);
+		//leftHamstring = new Muscle (leftUpperHamstring, leftLowerHamstring);
+		//rightHamstring = new Muscle (rightUpperHamstring, rightLowerHamstring);
+		//leftGluteus = new Muscle (leftUpperGluteus, leftLowerGluteus);
+		//rightGluteus = new Muscle (rightUpperGluteus, rightLowerGluteus);
 		leftHip = new Muscle (leftUpperHip, leftLowerHip);
 		rightHip = new Muscle (rightUpperHip, rightLowerHip);
-		abs = new Muscle (upperAbs, lowerAbs);
-		back = new Muscle (upperBack, lowerBack);*/
+		//abs = new Muscle (upperAbs, lowerAbs);
+		//back = new Muscle (upperBack, lowerBack);
 	}
 
 	// Update is called once per frame
 	void FixedUpdate () {
+		
+			if (Input.GetKey (KeyCode.U)) {
+			leftHip.MoveMuscle(muscleForce);
+			} else if (Input.GetKey (KeyCode.O)) {
+			rightHip.MoveMuscle(muscleForce);
+			} 
 
 		betweenFeetVector = GetBetweenFeetVector (leftFoot, rightFoot);
 
@@ -65,16 +73,19 @@ public class BalanceIntelligence : MonoBehaviour {
 
 		print ("Is body's CoG inside the feet's support polygon?: " + IsBodySupported());*/
 
+			
 		if (IsBodySupported ()) {
 			//use balancing script in PIDControl/skeletonMuscles
 		} else {
-			print ("Not supported, moving ");
-			if (leftFootCoGToBodyCoG.magnitude > rightFootCoGToBodyCoG.magnitude) {
-				print ("leftFoot to ");
-				TakeStep (leftFoot, rightFoot);
-			} else {
-				print ("rightFoot to ");
-				TakeStep (rightFoot, leftFoot );
+			if (!isWalking) {
+				//print ("Not supported, moving ");
+				if (leftFootCoGToBodyCoG.magnitude > rightFootCoGToBodyCoG.magnitude) {
+					//print ("leftFoot to ");
+					TakeStep (leftFoot, rightFoot);
+				} else {
+					//print ("rightFoot to ");
+					TakeStep (rightFoot, leftFoot);
+				}
 			}
 		}
 
@@ -119,15 +130,30 @@ public class BalanceIntelligence : MonoBehaviour {
 
 	//If body's center of gravity is outside the support polygon, calculate line between bodyCoG and closest foot CoG. Then place the foot furthest away on this line.
 	Vector3 TakeStep(Rigidbody moveFoot, Rigidbody stayFoot){
+
+		isWalking = true;
 		//Vector3 goalPos = GetOrthogonalProjection(GetCenterOfGravity(moveFoot), (GetCenterOfGravity(stayFoot) - bodyCoG));  
 		Vector3 goalPos = bodyCoG + (bodyCoG - GetCenterOfGravity(stayFoot));
-		print ("goalPos: " + goalPos);
+		Vector3 initialFootPos = GetCenterOfGravity (moveFoot);
+
+		//print ("goalPos: " + goalPos);
 		gizmoFromFoot = stayFoot.transform.position;
 		gizmoToFoot = goalPos;
 		gizmoBodyCoG = bodyCoG;
-		moveFoot.transform.position = new Vector3(goalPos[0], 0.5f, goalPos[2]); //instantly move foot to just above goalPos, make more realistic later
+		//moveFoot.transform.position = new Vector3(goalPos[0], 0f, goalPos[2]); //instantly move foot to just above goalPos, make more realistic later
+		moveFoot.transform.position = new Vector3(goalPos[0], 0f, goalPos[2]);
+		moveFoot.transform.position = initialFootPos;
 
+		footGoalPos.transform.position = new Vector3(goalPos[0]-3, 0, goalPos[2]); 
 
+		FootGoalColliderScript fScript = (FootGoalColliderScript) footGoalPos.gameObject.GetComponent(typeof(FootGoalColliderScript));
+		fScript.CreateJoint (moveFoot);
+		//moveFoot.gameObject.AddComponent<SpringJoint> ();
+		//moveFoot.gameObject.GetComponent<SpringJoint> ().connectedBody = footGoalPos;
+
+		if (fScript.IsReached()) {
+			isWalking = false;
+		}
 		return goalPos;
 				
 	}
