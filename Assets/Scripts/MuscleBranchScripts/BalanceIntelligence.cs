@@ -13,7 +13,7 @@ public class BalanceIntelligence : MonoBehaviour {
 	public Muscle leftHip, rightHip;
 	//public Muscle abs;
 	//public Muscle back;
-	public Rigidbody leftFoot, rightFoot, bodyCore, footGoalPos;
+	public Rigidbody leftFoot, rightFoot, bodyCore, footGoalMarker;
 	public float betweenFeetVectorToBodyCoGEpsilon, muscleForce;
 	public float forceHamstring, forceGluteus, forceHip, forceAbs, forceBack;
 	private bool leftFootContact = false; 
@@ -25,9 +25,12 @@ public class BalanceIntelligence : MonoBehaviour {
 	private Vector3 gizmoFromFoot, gizmoBodyCoG, gizmoToFoot; //For drawing gizmos for debug
 
 	private bool isWalking;
+	private FootGoalColliderScript fScript;
 
 	// Use this for initialization
 	void Start () {
+		fScript = (FootGoalColliderScript) footGoalMarker.gameObject.GetComponent(typeof(FootGoalColliderScript));
+
 		//leftHamstring = new Muscle (leftUpperHamstring, leftLowerHamstring);
 		//rightHamstring = new Muscle (rightUpperHamstring, rightLowerHamstring);
 		//leftGluteus = new Muscle (leftUpperGluteus, leftLowerGluteus);
@@ -73,10 +76,17 @@ public class BalanceIntelligence : MonoBehaviour {
 
 		print ("Is body's CoG inside the feet's support polygon?: " + IsBodySupported());*/
 
+		if (fScript.IsReached ()) {
+			isWalking = false;
+			print ("isWalking is false");
+		} else {
+			print ("isWalking is true");
+		}
 			
 		if (IsBodySupported ()) {
 			//use balancing script in PIDControl/skeletonMuscles
 		} else {
+			
 			if (!isWalking) {
 				//print ("Not supported, moving ");
 				if (leftFootCoGToBodyCoG.magnitude > rightFootCoGToBodyCoG.magnitude) {
@@ -141,18 +151,25 @@ public class BalanceIntelligence : MonoBehaviour {
 		gizmoToFoot = goalPos;
 		gizmoBodyCoG = bodyCoG;
 		//moveFoot.transform.position = new Vector3(goalPos[0], 0f, goalPos[2]); //instantly move foot to just above goalPos, make more realistic later
+
+		FootGoalColliderScript fScript = (FootGoalColliderScript) footGoalMarker.gameObject.GetComponent(typeof(FootGoalColliderScript));
+
+		footGoalMarker.transform.position = new Vector3(goalPos[0], 0, goalPos[2]); 
 		moveFoot.transform.position = new Vector3(goalPos[0], 0f, goalPos[2]);
-		moveFoot.transform.position = initialFootPos;
-
-		footGoalPos.transform.position = new Vector3(goalPos[0]-3, 0, goalPos[2]); 
-
-		FootGoalColliderScript fScript = (FootGoalColliderScript) footGoalPos.gameObject.GetComponent(typeof(FootGoalColliderScript));
 		fScript.CreateJoint (moveFoot);
+		moveFoot.transform.position = initialFootPos;
+		fScript.Setup (true); //indicates that setup of joint is done
+		print("Now foot goal setup is true");
+
+
+
+
 		//moveFoot.gameObject.AddComponent<SpringJoint> ();
 		//moveFoot.gameObject.GetComponent<SpringJoint> ().connectedBody = footGoalPos;
 
 		if (fScript.IsReached()) {
 			isWalking = false;
+			print ("isWalking is false");
 		}
 		return goalPos;
 				
