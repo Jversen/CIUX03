@@ -20,28 +20,28 @@ public class FootGoalColliderScript : MonoBehaviour {
 	}
 
 	public bool IsSetup(){
-		print ("Is spring joint set up? " + isSetup);
+		//print ("Is spring joint set up? " + isSetup);
 		return isSetup;
 	}
 
 	public bool IsReached(){
-		print ("isReached? " + isReached);
+		//print ("isReached? " + isReached);
 		return isReached;
 	}
 
 	public void CreateJoint(Rigidbody rb){
-		print ("Creating springjoint to " + rb.tag);
+		//print ("Creating springjoint to " + rb.tag);
 		isReached = false;
 		SpringJoint joint = gameObject.AddComponent<SpringJoint> ();
 		joint.enableCollision = true;
-		joint.spring = 50f;
+		joint.spring = 225f;
 		gameObject.GetComponent<SpringJoint> ().connectedBody = rb;
 	}
 
 	void OnTriggerEnter(Collider coll){
-		print ("Some collision, object with tag " + coll.gameObject.tag + " collided with footGoalTrigger");
+		//print ("Some collision, object with tag " + coll.gameObject.tag + " collided with footGoalTrigger");
 		if (isSetup && (coll.gameObject.tag == "LeftFoot" || coll.gameObject.tag == "RightFoot")) {
-			print ("Collided with " + coll.gameObject.tag + "Destroying springjoint");
+			//print ("Collided with " + coll.gameObject.tag + "Destroying springjoint");
 			isReached = true;
 			Destroy (GetComponent<SpringJoint> ());
 		}

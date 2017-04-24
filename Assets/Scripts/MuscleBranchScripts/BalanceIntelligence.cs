@@ -109,6 +109,14 @@ public class BalanceIntelligence : MonoBehaviour {
 		back.MoveMuscle (forceBack);*/
 	}
 
+
+		void OnCollisionStay(Collision collisionInfo) {
+			foreach (ContactPoint contact in collisionInfo.contacts) {
+			print (contact.point);
+			}
+		}
+
+
 	Vector3 GetBetweenFeetVector(Rigidbody foot1, Rigidbody foot2){
 		Vector3 feetVector = GetCenterOfGravity(foot1) - GetCenterOfGravity(foot2);
 		return feetVector;
@@ -143,7 +151,7 @@ public class BalanceIntelligence : MonoBehaviour {
 
 		isWalking = true;
 		//Vector3 goalPos = GetOrthogonalProjection(GetCenterOfGravity(moveFoot), (GetCenterOfGravity(stayFoot) - bodyCoG));  
-		Vector3 goalPos = bodyCoG + (bodyCoG - GetCenterOfGravity(stayFoot));
+		Vector3 goalPos = bodyCoG + (bodyCoG - GetCenterOfGravity(stayFoot))/2;
 		Vector3 initialFootPos = GetCenterOfGravity (moveFoot);
 
 		//print ("goalPos: " + goalPos);
@@ -154,8 +162,8 @@ public class BalanceIntelligence : MonoBehaviour {
 
 		FootGoalColliderScript fScript = (FootGoalColliderScript) footGoalMarker.gameObject.GetComponent(typeof(FootGoalColliderScript));
 
-		footGoalMarker.transform.position = new Vector3(goalPos[0], 0, goalPos[2]); 
-		moveFoot.transform.position = new Vector3(goalPos[0], 0f, goalPos[2]);
+		footGoalMarker.transform.position = new Vector3(goalPos[0], 0.5f, goalPos[2]); 
+		moveFoot.transform.position = new Vector3(goalPos[0], 0.5f, goalPos[2]);
 		fScript.CreateJoint (moveFoot);
 		moveFoot.transform.position = initialFootPos;
 		fScript.Setup (true); //indicates that setup of joint is done
@@ -208,7 +216,7 @@ public class BalanceIntelligence : MonoBehaviour {
 
 	void OnCollisionEnter(Collision coll){
 		print ("Entered OnCollisionEnter");
-		if (coll.contacts[0].thisCollider.gameObject.CompareTag("Ground")){
+		if (coll.contacts[0].thisCollider.gameObject.CompareTag("Plane")){
 			if (coll.contacts [1].thisCollider.gameObject.CompareTag ("LeftFoot")) {
 				leftFootContact = true; 
 			} else if (coll.contacts [1].thisCollider.gameObject.CompareTag ("RightFoot")) {
