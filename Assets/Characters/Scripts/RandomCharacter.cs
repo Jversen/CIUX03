@@ -5,7 +5,7 @@ public class RandomCharacter : MonoBehaviour
 {
     enum BodyParts { Chest, Head, LeftUpperArm, RightUpperArm, LeftLowerArm, RightLowerArm, LeftHand, RightHand, LeftUpperLeg, RightUpperLeg, LeftLowerLeg, RightLowerLeg, LeftFoot, RightFoot, Tail };
 
-    // Body Parts
+	// Body Parts
     private string charactersDir = "Prefabs/Characters/";
     private string characterPath;
     private string[] characterDirs;
@@ -24,10 +24,14 @@ public class RandomCharacter : MonoBehaviour
     private GameObject rightLowerLeg;
     private GameObject leftFoot;
     private GameObject rightFoot;
-    private GameObject tail;
+	private GameObject tail;
+
+	private GameObject leftFistHome;
+	private GameObject leftFistAway;
 
     void Start()
     {
+
         characterPath = Application.dataPath + "/Resources/" + charactersDir;
         characterDirs = Directory.GetDirectories(characterPath);
 
@@ -74,10 +78,42 @@ public class RandomCharacter : MonoBehaviour
         {
             attach(tail, chest, chest.transform.Find("Tail Socket"));
         }
+			
+		EnablePunching ();
 
         // Freeze chest position for testing
-        //chest.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePositionY;
+		chest.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePositionY;
     }
+
+	//Create two regions near left arm of character for using as spring anchors when punching
+	private void EnablePunching(){
+		leftFistHome = InstantiateBodyPart (Resources.Load(charactersDir + "TriggerRegion"),chest);
+		leftFistAway = InstantiateBodyPart (Resources.Load(charactersDir + "TriggerRegion"),chest);
+		PunchingScript punchingScript = leftFistAway.AddComponent<PunchingScript> ();
+
+		punchingScript.fist = leftHand.GetComponent <Rigidbody>();
+		punchingScript.home = leftFistHome.GetComponent<Rigidbody>();
+
+		float upperArmLength = GetLongest (leftUpperArm.GetComponent<Renderer> ().bounds.size);
+		float armLength = GetLongest (leftLowerArm.GetComponent<Renderer> ().bounds.size) + upperArmLength;
+
+		leftHand.GetComponent<Rigidbody> ().mass = 0.1f;
+		leftUpperArm.GetComponent<Rigidbody> ().mass = 0.1f;
+		leftLowerArm.GetComponent<Rigidbody> ().mass = 0.1f;
+
+		Vector3 leftShoulderPos = chest.transform.Find ("Left Arm Socket").position;
+		leftFistHome.transform.position = leftShoulderPos + leftFistHome.transform.forward * upperArmLength - leftFistHome.transform.up * 0.1f;
+		leftFistAway.transform.position = leftShoulderPos + leftFistAway.transform.forward * armLength - leftFistAway.transform.up * 0.1f;
+
+		Vector3 leftHandPos = leftHand.transform.position;
+		leftHand.transform.position = leftFistHome.transform.position;
+		SpringJoint leftHandSpring = leftHand.AddComponent<SpringJoint> ();
+		leftHandSpring.connectedBody = leftFistHome.GetComponent<Rigidbody> ();
+		leftHandSpring.enableCollision = true;
+		leftHandSpring.spring = 8f;
+		leftHand.transform.position = leftHandPos;
+		//TODO: Fine tune punch region positions
+	}
 
     void Update()
     {
@@ -86,8 +122,8 @@ public class RandomCharacter : MonoBehaviour
 
     private Object LoadRandomBodyPart(BodyParts bodyPart)
     {
-        string character = Path.GetFileName(characterDirs[Random.Range(0, characterDirs.Length)]);
-        return Resources.Load(charactersDir + character + "/" + bodyPart);
+		string character = Path.GetFileName(characterDirs[Random.Range(0, characterDirs.Length)]);
+		return Resources.Load(charactersDir + character + "/" + bodyPart);
     }
 
     private GameObject InstantiateBodyPart(Object bodyPart, GameObject parent)
@@ -97,7 +133,8 @@ public class RandomCharacter : MonoBehaviour
             return null;
         }
         GameObject bodyPartInst = Instantiate((GameObject)bodyPart);
-        bodyPartInst.transform.parent = parent.transform;
+		bodyPartInst.transform.parent = parent.transform;
+		bodyPartInst.transform.rotation = parent.transform.rotation;
         return bodyPartInst;
     }
 
@@ -117,5 +154,16 @@ public class RandomCharacter : MonoBehaviour
 		attachToSliceable.AddComponent<Sliceable> ();
 		attachToSliceable.AddComponent<JointDestroyerSliceable> ();
 		attachToSliceable.GetComponent<JointDestroyerSliceable> ().connector = objectToAttach;
+	}
+
+	public float GetLongest(Vector3 vector){
+		float longest = vector.x;
+		if (vector.y > longest) {
+			longest = vector.y;
+		}
+		if (vector.z > longest) {
+			longest = vector.z;
+		}
+		return longest;
 	}
 }

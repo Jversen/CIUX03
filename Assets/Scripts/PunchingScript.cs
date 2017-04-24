@@ -9,7 +9,7 @@ public class PunchingScript : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if(Input.GetKeyDown("k")){
+		if(Input.GetKeyDown("k")){ //TODO: Replace with public variable
 			Vector3 fistPos = fist.transform.position;
 			fist.transform.position = transform.position;
 			SpringJoint joint = fist.GetComponent<SpringJoint> ();
