@@ -7,23 +7,25 @@ public class GrabScript : MonoBehaviour {
 	public GameObject sword;
 	public Rigidbody rb_sword;
 
+	public GameObject cube_body;
+
 	private int k;
 
-	public Vector3 swordpush;
+	public Vector3 swing;
 
 	// Use this for initialization
 	void Start () {
 		k = 0;
-		swordpush = new Vector3 (0, 1, 0);
 	}
 
 	// Update is called once per frame
 	void Update () {
+		swing = cube_body.transform.forward;
 		if ((Input.GetKeyDown ("space") && (k == 1))) {
 			Destroy (GetComponent<FixedJoint> ());
 			k = 0;
 		} else if (Input.GetKeyDown ("j") && (k == 1)) {
-			rb_sword.AddForce (Vector3.right * 1000);
+			rb_sword.AddForce (swing * 1000);
 			//rb_sword.AddTorque (0, 0, 0);
 		} else if (k == 1) {
 			rb_sword.AddForce (Vector3.up * 20);
@@ -44,7 +46,7 @@ public class GrabScript : MonoBehaviour {
 			gameObject.AddComponent<FixedJoint> ();
 			GetComponent<FixedJoint> ().connectedBody = col.rigidbody;
 
-			//rb_sword.useGravity = false;
+			rb_sword.useGravity = false;
 			k = 1;
 		}
 	}
