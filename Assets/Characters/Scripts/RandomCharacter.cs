@@ -80,6 +80,10 @@ public class RandomCharacter : MonoBehaviour
         }
 			
 		EnablePunching ();
+		InputControl controller = gameObject.AddComponent<InputControl> ();
+		controller.characterChest = chest.GetComponent<Rigidbody> ();
+		controller.forceConstant = 1000;
+		controller.rotationSpeed = 1000;
 
         // Freeze chest position for testing
 		chest.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePositionY;
