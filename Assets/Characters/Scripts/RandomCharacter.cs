@@ -80,13 +80,12 @@ public class RandomCharacter : MonoBehaviour
         }
 			
 		EnablePunching ();
-		InputControl controller = gameObject.AddComponent<InputControl> ();
-		controller.characterChest = chest.GetComponent<Rigidbody> ();
-		controller.forceConstant = 1000;
-		controller.rotationSpeed = 1000;
+		EnableUserInput ();
+		EnableFootPlacement ();
+
 
         // Freeze chest position for testing
-		chest.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePositionY;
+		//chest.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePositionY;
     }
 
 	//Create two regions near left arm of character for using as spring anchors when punching
@@ -117,6 +116,40 @@ public class RandomCharacter : MonoBehaviour
 		leftHandSpring.spring = 8f;
 		leftHand.transform.position = leftHandPos;
 		//TODO: Fine tune punch region positions
+	}
+
+	private void EnableUserInput(){
+		InputControl controller = gameObject.AddComponent<InputControl> ();
+		controller.characterChest = chest.GetComponent<Rigidbody> ();
+		controller.forceConstant = 1000;
+		controller.rotationSpeed = 1000;
+	}
+
+	private void EnableFootPlacement(){
+		PIDControl leftLowerLegPidControl = gameObject.AddComponent<PIDControl> ();
+		leftLowerLegPidControl.body = leftLowerLeg.GetComponent<Rigidbody> ();
+		leftLowerLegPidControl.mfConstant = 1500;
+		PIDControl leftUpperLegPidControl = gameObject.AddComponent<PIDControl> ();
+		leftUpperLegPidControl.body = leftLowerLeg.GetComponent<Rigidbody> ();
+		leftUpperLegPidControl.mfConstant = 1500;
+		PIDControl rightLowerLegPidControl = gameObject.AddComponent<PIDControl> ();
+		rightLowerLegPidControl.body = rightLowerLeg.GetComponent<Rigidbody> ();
+		rightLowerLegPidControl.mfConstant = 1500;
+		PIDControl rightUpperLegPidControl = gameObject.AddComponent<PIDControl> ();
+		rightUpperLegPidControl.body = rightLowerLeg.GetComponent<Rigidbody> ();
+		rightUpperLegPidControl.mfConstant = 1500;
+
+		BalanceIntelligence balanceIntelligence = gameObject.AddComponent<BalanceIntelligence> ();
+
+		GameObject footGoalMarker = InstantiateBodyPart (Resources.Load (charactersDir + "TriggerRegion"), chest);
+
+		FootGoalColliderScript footGoalCollider = footGoalMarker.AddComponent<FootGoalColliderScript> ();
+
+		balanceIntelligence.footGoalMarker = footGoalMarker.GetComponent<Rigidbody>();
+
+		balanceIntelligence.rightFoot = rightFoot.GetComponent<Rigidbody> ();
+		balanceIntelligence.leftFoot = leftFoot.GetComponent<Rigidbody> ();
+		balanceIntelligence.bodyCore = chest.GetComponent<Rigidbody> ();
 	}
 
     void Update()
