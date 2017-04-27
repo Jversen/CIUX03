@@ -241,4 +241,8 @@ public class RandomCharacter : MonoBehaviour
 		}
 		return longest;
 	}
+
+	public bool IsQuadruped(){
+		return isQuadruped;
+	}
 }
