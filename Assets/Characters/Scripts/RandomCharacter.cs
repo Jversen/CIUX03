@@ -40,7 +40,9 @@ public class RandomCharacter : MonoBehaviour
         characterDirs = Directory.GetDirectories(characterPath);
 
         // Instantiate objects
-        chest = InstantiateBodyPart(LoadRandomBodyPart(BodyParts.Chest), gameObject);
+		string chestPath = LoadRandomBodyPath ();
+		isQuadruped = chestPath.Equals ("Horse");
+		chest = InstantiateBodyPart(Resources.Load(charactersDir + chestPath + "/" + BodyParts.Chest), gameObject);
         head = InstantiateBodyPart(LoadRandomBodyPart(BodyParts.Head), chest);
         leftUpperArm = InstantiateBodyPart(LoadRandomBodyPart(BodyParts.LeftUpperArm), chest);
         rightUpperArm = InstantiateBodyPart(LoadRandomBodyPart(BodyParts.RightUpperArm), chest);
@@ -61,6 +63,9 @@ public class RandomCharacter : MonoBehaviour
 		//Set the mass of the upper body to bodyPartMass
 		ChangeMassOfUpperBody();
 			
+		UpperBodyPID upperBodyPID = chest.AddComponent<UpperBodyPID> ();
+		upperBodyPID.isQuadruped = isQuadruped;
+
 		Object tailObj = LoadRandomBodyPart(BodyParts.Tail);
         if (tailObj != null)
         {
@@ -201,10 +206,7 @@ public class RandomCharacter : MonoBehaviour
 
 	private string LoadRandomBodyPath()
 	{
-		int i = Random.Range (0, characterDirs.Length);
-		//Is used in ChangeMassOfUpperBody
-		isQuadruped = i == 0;
-		return Path.GetFileName(characterDirs[i]);
+		return Path.GetFileName(characterDirs[Random.Range (0, characterDirs.Length)]);
 	}
 
     private Object LoadRandomBodyPart(BodyParts bodyPart)
