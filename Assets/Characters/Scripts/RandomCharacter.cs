@@ -35,7 +35,10 @@ public class RandomCharacter : MonoBehaviour
 
     void Start()
     {
-
+		//Mass should not be lower than .1;
+		if (bodyPartMass < 0.1f) {
+			bodyPartMass = 0.1f;
+		}
         characterPath = Application.dataPath + "/Resources/" + charactersDir;
         characterDirs = Directory.GetDirectories(characterPath);
 
