@@ -44,12 +44,15 @@ public class RandomCharacter : MonoBehaviour
         rightLowerArm = InstantiateBodyPart(LoadRandomBodyPart(BodyParts.RightLowerArm), rightUpperArm);
         leftHand = InstantiateBodyPart(LoadRandomBodyPart(BodyParts.LeftHand), leftLowerArm);
         rightHand = InstantiateBodyPart(LoadRandomBodyPart(BodyParts.RightHand), rightLowerArm);
-        leftUpperLeg = InstantiateBodyPart(LoadRandomBodyPart(BodyParts.LeftUpperLeg), chest);
-        rightUpperLeg = InstantiateBodyPart(LoadRandomBodyPart(BodyParts.RightUpperLeg), chest);
-        leftLowerLeg = InstantiateBodyPart(LoadRandomBodyPart(BodyParts.LeftLowerLeg), leftUpperLeg);
-        rightLowerLeg = InstantiateBodyPart(LoadRandomBodyPart(BodyParts.RightLowerLeg), rightUpperLeg);
-        leftFoot = InstantiateBodyPart(LoadRandomBodyPart(BodyParts.LeftFoot), leftLowerLeg);
-        rightFoot = InstantiateBodyPart(LoadRandomBodyPart(BodyParts.RightFoot), rightLowerLeg);
+		string upperLegPath = LoadRandomBodyPath ();
+		leftUpperLeg = InstantiateBodyPart(Resources.Load(charactersDir + upperLegPath + "/" + BodyParts.LeftUpperLeg), chest);
+		rightUpperLeg = InstantiateBodyPart(Resources.Load(charactersDir + upperLegPath + "/" + BodyParts.RightUpperLeg), chest);
+		string lowerLegPath = LoadRandomBodyPath ();
+		leftLowerLeg = InstantiateBodyPart(Resources.Load(charactersDir + lowerLegPath + "/" + BodyParts.LeftLowerLeg), leftUpperLeg);
+		rightLowerLeg = InstantiateBodyPart(Resources.Load(charactersDir + lowerLegPath + "/" + BodyParts.RightLowerLeg), rightUpperLeg);
+		string footPath = LoadRandomBodyPath ();
+		leftFoot = InstantiateBodyPart(Resources.Load(charactersDir + footPath + "/" + BodyParts.LeftFoot), leftLowerLeg);
+		rightFoot = InstantiateBodyPart(Resources.Load(charactersDir + footPath + "/" + BodyParts.RightFoot), rightLowerLeg);
 
         Object tailObj = LoadRandomBodyPart(BodyParts.Tail);
         if (tailObj != null)
@@ -157,9 +160,14 @@ public class RandomCharacter : MonoBehaviour
 
     }
 
+	private string LoadRandomBodyPath()
+	{
+		return Path.GetFileName(characterDirs[Random.Range(0, characterDirs.Length)]);
+	}
+
     private Object LoadRandomBodyPart(BodyParts bodyPart)
     {
-		string character = Path.GetFileName(characterDirs[Random.Range(0, characterDirs.Length)]);
+		string character = LoadRandomBodyPath ();
 		return Resources.Load(charactersDir + character + "/" + bodyPart);
     }
 
