@@ -45,26 +45,18 @@ public class RandomCharacter : MonoBehaviour
         rightLowerArm = InstantiateBodyPart(LoadRandomBodyPart(BodyParts.RightLowerArm), rightUpperArm);
         leftHand = InstantiateBodyPart(LoadRandomBodyPart(BodyParts.LeftHand), leftLowerArm);
         rightHand = InstantiateBodyPart(LoadRandomBodyPart(BodyParts.RightHand), rightLowerArm);
-        leftUpperLeg = InstantiateBodyPart(LoadRandomBodyPart(BodyParts.LeftUpperLeg), chest);
-        rightUpperLeg = InstantiateBodyPart(LoadRandomBodyPart(BodyParts.RightUpperLeg), chest);
-        leftLowerLeg = InstantiateBodyPart(LoadRandomBodyPart(BodyParts.LeftLowerLeg), leftUpperLeg);
-        rightLowerLeg = InstantiateBodyPart(LoadRandomBodyPart(BodyParts.RightLowerLeg), rightUpperLeg);
-        leftFoot = InstantiateBodyPart(LoadRandomBodyPart(BodyParts.LeftFoot), leftLowerLeg);
-        rightFoot = InstantiateBodyPart(LoadRandomBodyPart(BodyParts.RightFoot), rightLowerLeg);
+		string upperLegPath = LoadRandomBodyPath ();
+		leftUpperLeg = InstantiateBodyPart(Resources.Load(charactersDir + upperLegPath + "/" + BodyParts.LeftUpperLeg), chest);
+		rightUpperLeg = InstantiateBodyPart(Resources.Load(charactersDir + upperLegPath + "/" + BodyParts.RightUpperLeg), chest);
+		string lowerLegPath = LoadRandomBodyPath ();
+		leftLowerLeg = InstantiateBodyPart(Resources.Load(charactersDir + lowerLegPath + "/" + BodyParts.LeftLowerLeg), leftUpperLeg);
+		rightLowerLeg = InstantiateBodyPart(Resources.Load(charactersDir + lowerLegPath + "/" + BodyParts.RightLowerLeg), rightUpperLeg);
+		string footPath = LoadRandomBodyPath ();
+		leftFoot = InstantiateBodyPart(Resources.Load(charactersDir + footPath + "/" + BodyParts.LeftFoot), leftLowerLeg);
+		rightFoot = InstantiateBodyPart(Resources.Load(charactersDir + footPath + "/" + BodyParts.RightFoot), rightLowerLeg);
 
 		//Set the mass of the upper body to bodyPartMass
-		chest.GetComponent<Rigidbody> ().mass = bodyPartMass;
-		head.GetComponent<Rigidbody> ().mass = bodyPartMass;
-
-		//If it is not a quadruped it's arms are part of the upper body;
-		if (!isQuadruped) {
-			leftUpperArm.GetComponent<Rigidbody> ().mass = bodyPartMass;
-			rightUpperArm.GetComponent<Rigidbody> ().mass = bodyPartMass;
-			leftLowerArm.GetComponent<Rigidbody> ().mass = bodyPartMass;
-			rightLowerArm.GetComponent<Rigidbody> ().mass = bodyPartMass;
-			leftHand.GetComponent<Rigidbody> ().mass = bodyPartMass;
-			rightHand.GetComponent<Rigidbody> ().mass = bodyPartMass;
-		}
+		ChangeMassOfUpperBody();
 			
 		Object tailObj = LoadRandomBodyPart(BodyParts.Tail);
         if (tailObj != null)
@@ -103,6 +95,28 @@ public class RandomCharacter : MonoBehaviour
         // Freeze chest position for testing
 		chest.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePositionY;
     }
+
+	private void ChangeMassOfUpperBody(){
+
+		chest.GetComponent<Rigidbody> ().mass = bodyPartMass;
+		head.GetComponent<Rigidbody> ().mass = bodyPartMass;
+
+		//If it is not a quadruped it's arms are part of the upper body and thus their masses should be changed;
+		if (!isQuadruped) {
+			leftUpperArm.GetComponent<Rigidbody> ().mass = bodyPartMass;
+			rightUpperArm.GetComponent<Rigidbody> ().mass = bodyPartMass;
+			leftLowerArm.GetComponent<Rigidbody> ().mass = bodyPartMass;
+			rightLowerArm.GetComponent<Rigidbody> ().mass = bodyPartMass;
+			leftHand.GetComponent<Rigidbody> ().mass = bodyPartMass;
+			rightHand.GetComponent<Rigidbody> ().mass = bodyPartMass;
+		}
+
+		if (tail != null)
+		{
+			tail.GetComponent<Rigidbody> ().mass = bodyPartMass;
+		}
+		
+	}
 
 	//Create two regions near left arm of character for using as spring anchors when punching
 	private void EnablePunching(){
@@ -173,11 +187,17 @@ public class RandomCharacter : MonoBehaviour
 
     }
 
+	private string LoadRandomBodyPath()
+	{
+		int i = Random.Range (0, characterDirs.Length);
+		//Is used in ChangeMassOfUpperBody
+		isQuadruped = i == 0;
+		return Path.GetFileName(characterDirs[i]);
+	}
+
     private Object LoadRandomBodyPart(BodyParts bodyPart)
     {	
-		int i = Random.Range (0, characterDirs.Length);
-		isQuadruped = i == 0;
-		string character = Path.GetFileName(characterDirs[i]);
+		string character = LoadRandomBodyPath ();
 		return Resources.Load(charactersDir + character + "/" + bodyPart);
     }
 
