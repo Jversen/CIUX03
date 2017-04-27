@@ -4,7 +4,8 @@ using UnityEngine;
 public class RandomCharacter : MonoBehaviour
 {
     enum BodyParts { Chest, Head, LeftUpperArm, RightUpperArm, LeftLowerArm, RightLowerArm, LeftHand, RightHand, LeftUpperLeg, RightUpperLeg, LeftLowerLeg, RightLowerLeg, LeftFoot, RightFoot, Tail };
-
+	public float bodyPartMass;
+	private bool isQuadruped;
 	// Body Parts
     private string charactersDir = "Prefabs/Characters/";
     private string characterPath;
@@ -54,10 +55,14 @@ public class RandomCharacter : MonoBehaviour
 		leftFoot = InstantiateBodyPart(Resources.Load(charactersDir + footPath + "/" + BodyParts.LeftFoot), leftLowerLeg);
 		rightFoot = InstantiateBodyPart(Resources.Load(charactersDir + footPath + "/" + BodyParts.RightFoot), rightLowerLeg);
 
-        Object tailObj = LoadRandomBodyPart(BodyParts.Tail);
+		//Set the mass of the upper body to bodyPartMass
+		ChangeMassOfUpperBody();
+			
+		Object tailObj = LoadRandomBodyPart(BodyParts.Tail);
         if (tailObj != null)
         {
             tail = InstantiateBodyPart(tailObj, chest);
+			tail.GetComponent<Rigidbody> ().mass = bodyPartMass;
         }
 
         chest.transform.localPosition = Vector3.zero;
@@ -99,6 +104,28 @@ public class RandomCharacter : MonoBehaviour
         // Freeze chest position for testing
 		chest.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePositionY;
     }
+
+	private void ChangeMassOfUpperBody(){
+
+		chest.GetComponent<Rigidbody> ().mass = bodyPartMass;
+		head.GetComponent<Rigidbody> ().mass = bodyPartMass;
+
+		//If it is not a quadruped it's arms are part of the upper body and thus their masses should be changed;
+		if (!isQuadruped) {
+			leftUpperArm.GetComponent<Rigidbody> ().mass = bodyPartMass;
+			rightUpperArm.GetComponent<Rigidbody> ().mass = bodyPartMass;
+			leftLowerArm.GetComponent<Rigidbody> ().mass = bodyPartMass;
+			rightLowerArm.GetComponent<Rigidbody> ().mass = bodyPartMass;
+			leftHand.GetComponent<Rigidbody> ().mass = bodyPartMass;
+			rightHand.GetComponent<Rigidbody> ().mass = bodyPartMass;
+		}
+
+		if (tail != null)
+		{
+			tail.GetComponent<Rigidbody> ().mass = bodyPartMass;
+		}
+		
+	}
 
 	//Create two regions near left arm of character for using as spring anchors when punching
 	private void EnablePunching(){
@@ -171,11 +198,14 @@ public class RandomCharacter : MonoBehaviour
 
 	private string LoadRandomBodyPath()
 	{
-		return Path.GetFileName(characterDirs[Random.Range(0, characterDirs.Length)]);
+		int i = Random.Range (0, characterDirs.Length);
+		//Is used in ChangeMassOfUpperBody
+		isQuadruped = i == 0;
+		return Path.GetFileName(characterDirs[i]);
 	}
 
     private Object LoadRandomBodyPart(BodyParts bodyPart)
-    {
+    {	
 		string character = LoadRandomBodyPath ();
 		return Resources.Load(charactersDir + character + "/" + bodyPart);
     }
