@@ -4,7 +4,8 @@ using UnityEngine;
 public class RandomCharacter : MonoBehaviour
 {
     enum BodyParts { Chest, Head, LeftUpperArm, RightUpperArm, LeftLowerArm, RightLowerArm, LeftHand, RightHand, LeftUpperLeg, RightUpperLeg, LeftLowerLeg, RightLowerLeg, LeftFoot, RightFoot, Tail };
-
+	public float bodyPartMass;
+	private bool isQuadruped;
 	// Body Parts
     private string charactersDir = "Prefabs/Characters/";
     private string characterPath;
@@ -51,10 +52,25 @@ public class RandomCharacter : MonoBehaviour
         leftFoot = InstantiateBodyPart(LoadRandomBodyPart(BodyParts.LeftFoot), leftLowerLeg);
         rightFoot = InstantiateBodyPart(LoadRandomBodyPart(BodyParts.RightFoot), rightLowerLeg);
 
-        Object tailObj = LoadRandomBodyPart(BodyParts.Tail);
+		//Set the mass of the upper body to bodyPartMass
+		chest.GetComponent<Rigidbody> ().mass = bodyPartMass;
+		head.GetComponent<Rigidbody> ().mass = bodyPartMass;
+
+		//If it is not a quadruped it's arms are part of the upper body;
+		if (!isQuadruped) {
+			leftUpperArm.GetComponent<Rigidbody> ().mass = bodyPartMass;
+			rightUpperArm.GetComponent<Rigidbody> ().mass = bodyPartMass;
+			leftLowerArm.GetComponent<Rigidbody> ().mass = bodyPartMass;
+			rightLowerArm.GetComponent<Rigidbody> ().mass = bodyPartMass;
+			leftHand.GetComponent<Rigidbody> ().mass = bodyPartMass;
+			rightHand.GetComponent<Rigidbody> ().mass = bodyPartMass;
+		}
+			
+		Object tailObj = LoadRandomBodyPart(BodyParts.Tail);
         if (tailObj != null)
         {
             tail = InstantiateBodyPart(tailObj, chest);
+			tail.GetComponent<Rigidbody> ().mass = bodyPartMass;
         }
 
         chest.transform.localPosition = Vector3.zero;
@@ -158,8 +174,10 @@ public class RandomCharacter : MonoBehaviour
     }
 
     private Object LoadRandomBodyPart(BodyParts bodyPart)
-    {
-		string character = Path.GetFileName(characterDirs[Random.Range(0, characterDirs.Length)]);
+    {	
+		int i = Random.Range (0, characterDirs.Length);
+		isQuadruped = i == 0;
+		string character = Path.GetFileName(characterDirs[i]);
 		return Resources.Load(charactersDir + character + "/" + bodyPart);
     }
 
