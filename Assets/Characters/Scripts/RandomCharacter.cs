@@ -92,6 +92,15 @@ public class RandomCharacter : MonoBehaviour
 		EnableFootPlacement ();
 		*/
 
+		//Make feet rotation horizontal
+		float rightFootYRot = rightFoot.transform.rotation.eulerAngles.y;
+		rightFoot.transform.rotation = Quaternion.Euler(0, rightFootYRot, 0);
+		float leftFootYRot = leftFoot.transform.rotation.eulerAngles.y;
+		leftFoot.transform.rotation = Quaternion.Euler(0, leftFootYRot, 0);
+		//Move character down to make feet touch the ground.
+		Vector3 footHeight = new Vector3 (0, rightFoot.transform.position.y, 0);
+		chest.transform.parent.position -= footHeight;
+
         // Freeze chest position for testing
 		//chest.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePositionY;
     }
