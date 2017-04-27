@@ -86,14 +86,14 @@ public class RandomCharacter : MonoBehaviour
         {
             attach(tail, chest, chest.transform.Find("Tail Socket"));
         }
-			/*
+		/*
 		EnablePunching ();
 		EnableUserInput ();
 		EnableFootPlacement ();
-*/
+		*/
 
         // Freeze chest position for testing
-		chest.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePositionY;
+		//chest.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePositionY;
     }
 
 	private void ChangeMassOfUpperBody(){
