@@ -78,14 +78,14 @@ public class RandomCharacter : MonoBehaviour
         {
             attach(tail, chest, chest.transform.Find("Tail Socket"));
         }
-			
+			/*
 		EnablePunching ();
 		EnableUserInput ();
 		EnableFootPlacement ();
-
+*/
 
         // Freeze chest position for testing
-		//chest.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePositionY;
+		chest.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePositionY;
     }
 
 	//Create two regions near left arm of character for using as spring anchors when punching
