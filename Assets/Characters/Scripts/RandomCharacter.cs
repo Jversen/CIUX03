@@ -11,6 +11,9 @@ public class RandomCharacter : MonoBehaviour
     private string characterPath;
     private string[] characterDirs;
 
+	public string horizontalAxis;
+	public string verticalAxis;
+
     private GameObject chest;
     private GameObject head;
     private GameObject leftUpperArm;
@@ -162,6 +165,8 @@ public class RandomCharacter : MonoBehaviour
 		controller.characterChest = chest.GetComponent<Rigidbody> ();
 		controller.forceConstant = 1000;
 		controller.rotationSpeed = 1000;
+		controller.horizontalAxis = horizontalAxis;
+		controller.verticalAxis = verticalAxis;
 	}
 
 	private void EnableFootPlacement(){

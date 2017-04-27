@@ -7,6 +7,8 @@ public class InputControl : MonoBehaviour {
 	public Rigidbody characterChest;
 	public float forceConstant;
 	public float rotationSpeed;
+	public string horizontalAxis;
+	public string verticalAxis;
 
 	// Use this for initialization
 	void Start () {
@@ -15,9 +17,9 @@ public class InputControl : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		float translationDir = Input.GetAxis ("Vertical");
+		float translationDir = Input.GetAxis (verticalAxis);
 		float translation = translationDir * forceConstant;
-		float rotation = Input.GetAxis("Horizontal") * rotationSpeed;
+		float rotation = Input.GetAxis(horizontalAxis) * rotationSpeed;
 		translation *= Time.deltaTime;
 		rotation *= Time.deltaTime;
 		//Add force in Y-axis to compensate for rearing.
