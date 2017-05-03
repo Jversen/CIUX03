@@ -160,7 +160,7 @@ public class RandomUpperBody : MonoBehaviour
 	void Update()
 	{
 		if (head.transform.position.y < 3) {
-			Destroy (chest.transform.parent.parent.gameObject);
+			Ragdoll.MakeRagdoll (chest.transform.parent.parent.gameObject);
 		}
 	}
 
