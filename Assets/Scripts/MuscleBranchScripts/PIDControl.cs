@@ -49,7 +49,7 @@ public class PIDControl : MonoBehaviour {
 		        outVal = pidFunction (error, Time.deltaTime) - derivative * 20;
 		        outVal2 = pidFunction (error2, Time.deltaTime) - derivative2 * 20;
 		 
-		        /*if (inVal >= 0) {
+		        if (inVal >= 0) {
 			            legWestMuscle.MoveMuscle (-mfConstant * (float)outVal);
 		        } else {
 			            legEastMuscle.MoveMuscle (mfConstant * (float)outVal);
@@ -59,10 +59,10 @@ public class PIDControl : MonoBehaviour {
 			            legSouthMuscle.MoveMuscle (-mfConstant * (float)outVal2);
 		        } else {
 			            legNorthMuscle.MoveMuscle (mfConstant * (float)outVal2);
-			        }*/
+			        }
 		 
-		        body.AddRelativeForce(body.transform.forward * (float) outVal + body.transform.right * (float) -outVal2);
-		        body.AddRelativeForce(body.transform.right * (float) -outVal2);
+		        //body.AddRelativeForce(body.transform.forward * (float) outVal + body.transform.right * (float) -outVal2);
+		        //body.AddRelativeForce(body.transform.right * (float) -outVal2);
 
 		        previousInVal = inVal;
 		        previousInVal2 = inVal2;

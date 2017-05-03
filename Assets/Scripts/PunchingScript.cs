@@ -6,10 +6,11 @@ public class PunchingScript : MonoBehaviour {
 
 	public Rigidbody fist;
 	public Rigidbody home;
+	public string key;
 	
 	// Update is called once per frame
 	void Update () {
-		if(Input.GetKeyDown("k")){ //TODO: Replace with public variable
+		if(Input.GetKeyDown(key)){ //TODO: Replace with public variable
 			Vector3 fistPos = fist.transform.position;
 			fist.transform.position = transform.position;
 			SpringJoint joint = fist.GetComponent<SpringJoint> ();
