@@ -33,6 +33,9 @@ public class RandomCharacter : MonoBehaviour
 	private GameObject leftArm;
 	private GameObject rightArm;
 
+	private GameObject leftParent;
+	private GameObject rightParent;
+
 	private GameObject leftFistHome;
 	private GameObject leftFistAway;
 
@@ -67,6 +70,11 @@ public class RandomCharacter : MonoBehaviour
 		string footPath = LoadRandomBodyPath ();
 		leftFoot = InstantiateBodyPart(Resources.Load(charactersDir + footPath + "/" + BodyParts.LeftFoot), leftLowerLeg);
 		rightFoot = InstantiateBodyPart(Resources.Load(charactersDir + footPath + "/" + BodyParts.RightFoot), rightLowerLeg);
+
+		//APPLYING PUNCHING SCRIPT
+		rightParent = rightArm.transform.parent.gameObject.transform.parent.gameObject;
+		PunchingScript punchingScript = rightParent.AddComponent<PunchingScript>();
+		//TODO: The variable 'fist' in PunchingScript should be the parent
 
 		//Set the mass of the upper body to bodyPartMass
 		ChangeMassOfUpperBody();
