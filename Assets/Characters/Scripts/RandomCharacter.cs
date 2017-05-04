@@ -177,7 +177,7 @@ public class RandomCharacter : MonoBehaviour
 		controller.verticalAxis = verticalAxis;
 	}
 
-	private void EnableFootPlacement(){
+	/*private void EnableFootPlacement(){
 		PIDControl leftLowerLegPidControl = gameObject.AddComponent<PIDControl> ();
 		leftLowerLegPidControl.body = leftLowerLeg.GetComponent<Rigidbody> ();
 		leftLowerLegPidControl.mfConstant = 1500;
@@ -202,7 +202,7 @@ public class RandomCharacter : MonoBehaviour
 		balanceIntelligence.rightFoot = rightFoot.GetComponent<Rigidbody> ();
 		balanceIntelligence.leftFoot = leftFoot.GetComponent<Rigidbody> ();
 		balanceIntelligence.bodyCore = chest.GetComponent<Rigidbody> ();
-	}
+	}*/
 
     void Update()
     {
