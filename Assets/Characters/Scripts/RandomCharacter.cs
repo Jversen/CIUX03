@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class RandomCharacter : MonoBehaviour
 {
-    enum BodyParts { Chest, Head, LeftUpperArm, RightUpperArm, LeftLowerArm, RightLowerArm, LeftHand, RightHand, LeftUpperLeg, RightUpperLeg, LeftLowerLeg, RightLowerLeg, LeftFoot, RightFoot, Tail };
+    enum BodyParts { Chest, Head, LeftArm, RightArm, LeftUpperLeg, RightUpperLeg, LeftLowerLeg, RightLowerLeg, LeftFoot, RightFoot, Tail };
 	public float bodyPartMass;
 	private bool isQuadruped;
 	// Body Parts
@@ -30,6 +30,9 @@ public class RandomCharacter : MonoBehaviour
     private GameObject rightFoot;
 	private GameObject tail;
 
+	private GameObject leftArm;
+	private GameObject rightArm;
+
 	private GameObject leftFistHome;
 	private GameObject leftFistAway;
 
@@ -47,12 +50,14 @@ public class RandomCharacter : MonoBehaviour
 		isQuadruped = chestPath.Equals ("Horse");
 		chest = InstantiateBodyPart(Resources.Load(charactersDir + chestPath + "/" + BodyParts.Chest), gameObject);
         head = InstantiateBodyPart(LoadRandomBodyPart(BodyParts.Head), chest);
-        leftUpperArm = InstantiateBodyPart(LoadRandomBodyPart(BodyParts.LeftUpperArm), chest);
-        rightUpperArm = InstantiateBodyPart(LoadRandomBodyPart(BodyParts.RightUpperArm), chest);
-        leftLowerArm = InstantiateBodyPart(LoadRandomBodyPart(BodyParts.LeftLowerArm), leftUpperArm);
-        rightLowerArm = InstantiateBodyPart(LoadRandomBodyPart(BodyParts.RightLowerArm), rightUpperArm);
-        leftHand = InstantiateBodyPart(LoadRandomBodyPart(BodyParts.LeftHand), leftLowerArm);
-        rightHand = InstantiateBodyPart(LoadRandomBodyPart(BodyParts.RightHand), rightLowerArm);
+		leftArm = InstantiateBodyPart(LoadRandomBodyPart(BodyParts.LeftArm), chest);
+		rightArm = InstantiateBodyPart(LoadRandomBodyPart(BodyParts.RightArm), chest);
+        //leftUpperArm = InstantiateBodyPart(LoadRandomBodyPart(BodyParts.LeftUpperArm), chest);
+        //rightUpperArm = InstantiateBodyPart(LoadRandomBodyPart(BodyParts.RightUpperArm), chest);
+        //leftLowerArm = InstantiateBodyPart(LoadRandomBodyPart(BodyParts.LeftLowerArm), leftUpperArm);
+        //rightLowerArm = InstantiateBodyPart(LoadRandomBodyPart(BodyParts.RightLowerArm), rightUpperArm);
+        //leftHand = InstantiateBodyPart(LoadRandomBodyPart(BodyParts.LeftHand), leftLowerArm);
+        //rightHand = InstantiateBodyPart(LoadRandomBodyPart(BodyParts.RightHand), rightLowerArm);
 		string upperLegPath = LoadRandomBodyPath ();
 		leftUpperLeg = InstantiateBodyPart(Resources.Load(charactersDir + upperLegPath + "/" + BodyParts.LeftUpperLeg), chest);
 		rightUpperLeg = InstantiateBodyPart(Resources.Load(charactersDir + upperLegPath + "/" + BodyParts.RightUpperLeg), chest);
@@ -80,12 +85,14 @@ public class RandomCharacter : MonoBehaviour
 
         // Attach joints
         attach(head, chest, chest.transform.Find("Head Socket"));
-        attach(leftUpperArm, chest, chest.transform.Find("Left Arm Socket"));
-        attach(rightUpperArm, chest, chest.transform.Find("Right Arm Socket"));
-        attachSliceable(leftLowerArm, leftUpperArm, leftUpperArm.transform.Find("Lower Arm Socket"));
-		attachSliceable(rightLowerArm, rightUpperArm, rightUpperArm.transform.Find("Lower Arm Socket"));
-		attachSliceable(leftHand, leftLowerArm, leftLowerArm.transform.Find("Hand Socket"));
-		attachSliceable(rightHand, rightLowerArm, rightLowerArm.transform.Find("Hand Socket"));
+		attach(leftArm, chest, chest.transform.Find("Left Arm Socket"));
+		attach(rightArm, chest, chest.transform.Find("Right Arm Socket"));
+        //attach(leftUpperArm, chest, chest.transform.Find("Left Arm Socket"));
+        //attach(rightUpperArm, chest, chest.transform.Find("Right Arm Socket"));
+        //attachSliceable(leftLowerArm, leftUpperArm, leftUpperArm.transform.Find("Lower Arm Socket"));
+		//attachSliceable(rightLowerArm, rightUpperArm, rightUpperArm.transform.Find("Lower Arm Socket"));
+		//attachSliceable(leftHand, leftLowerArm, leftLowerArm.transform.Find("Hand Socket"));
+		//attachSliceable(rightHand, rightLowerArm, rightLowerArm.transform.Find("Hand Socket"));
 		attach(leftUpperLeg, chest, chest.transform.Find("Left Leg Socket"));
 		attach(rightUpperLeg, chest, chest.transform.Find("Right Leg Socket"));
 		attachSliceable(leftLowerLeg, leftUpperLeg, leftUpperLeg.transform.Find("Lower Leg Socket"));
@@ -123,12 +130,14 @@ public class RandomCharacter : MonoBehaviour
 
 		//If it is not a quadruped it's arms are part of the upper body and thus their masses should be changed;
 		if (!isQuadruped) {
-			leftUpperArm.GetComponent<Rigidbody> ().mass = bodyPartMass;
-			rightUpperArm.GetComponent<Rigidbody> ().mass = bodyPartMass;
-			leftLowerArm.GetComponent<Rigidbody> ().mass = bodyPartMass;
-			rightLowerArm.GetComponent<Rigidbody> ().mass = bodyPartMass;
-			leftHand.GetComponent<Rigidbody> ().mass = bodyPartMass;
-			rightHand.GetComponent<Rigidbody> ().mass = bodyPartMass;
+			leftArm.GetComponent<Rigidbody> ().mass = bodyPartMass;
+			rightArm.GetComponent<Rigidbody> ().mass = bodyPartMass;
+			//leftUpperArm.GetComponent<Rigidbody> ().mass = bodyPartMass;
+			//rightUpperArm.GetComponent<Rigidbody> ().mass = bodyPartMass;
+			//leftLowerArm.GetComponent<Rigidbody> ().mass = bodyPartMass;
+			//rightLowerArm.GetComponent<Rigidbody> ().mass = bodyPartMass;
+			//leftHand.GetComponent<Rigidbody> ().mass = bodyPartMass;
+			//rightHand.GetComponent<Rigidbody> ().mass = bodyPartMass;
 		}
 
 		if (tail != null)
@@ -137,7 +146,7 @@ public class RandomCharacter : MonoBehaviour
 		}
 		
 	}
-
+	/*
 	//Create two regions near left arm of character for using as spring anchors when punching
 	private void EnablePunching(){
 		leftFistHome = InstantiateBodyPart (Resources.Load(charactersDir + "TriggerRegion"),chest);
@@ -147,12 +156,12 @@ public class RandomCharacter : MonoBehaviour
 		punchingScript.fist = leftHand.GetComponent <Rigidbody>();
 		punchingScript.home = leftFistHome.GetComponent<Rigidbody>();
 
-		float upperArmLength = GetLongest (leftUpperArm.GetComponent<Renderer> ().bounds.size);
-		float armLength = GetLongest (leftLowerArm.GetComponent<Renderer> ().bounds.size) + upperArmLength;
+		float upperArmLength = GetLongest (leftArm.GetComponent<Renderer> ().bounds.size);
+		float armLength = GetLongest (leftArm.GetComponent<Renderer> ().bounds.size) + upperArmLength;
 
 		leftHand.GetComponent<Rigidbody> ().mass = 0.1f;
-		leftUpperArm.GetComponent<Rigidbody> ().mass = 0.1f;
-		leftLowerArm.GetComponent<Rigidbody> ().mass = 0.1f;
+		leftArm.GetComponent<Rigidbody> ().mass = 0.1f;
+		leftArm.GetComponent<Rigidbody> ().mass = 0.1f;
 
 		Vector3 leftShoulderPos = chest.transform.Find ("Left Arm Socket").position;
 		leftFistHome.transform.position = leftShoulderPos + leftFistHome.transform.forward * upperArmLength - leftFistHome.transform.up * 0.1f;
@@ -167,6 +176,7 @@ public class RandomCharacter : MonoBehaviour
 		leftHand.transform.position = leftHandPos;
 		//TODO: Fine tune punch region positions
 	}
+	*/
 
 	private void EnableUserInput(){
 		InputControl controller = gameObject.AddComponent<InputControl> ();
