@@ -8,7 +8,23 @@ public class PIDControl : MonoBehaviour {
 	private float previousInValZ;
 	private float goalX = 0;
 	private float goalZ = 0;
-	private float muscleForce = 7000f;
+	private float integralX;
+	private float integralZ;
+
+	private float kp = 3000f;
+	private float kd = 60f;
+	private float ki = 160f;
+
+	private float maxDerivativeX = 400f;
+	private float maxDerivativeZ = 400f;
+	private float minDerivativeX = -40f;
+	private float minDerivativeZ = -40f;
+
+	public static float maxIntegralX = -100f;
+	public static float maxIntegralZ = -100f;
+	public static float minIntegralX = 60f;
+	public static float minIntegralZ = 60f;
+
 
 
 	private float inValX;
@@ -24,6 +40,8 @@ public class PIDControl : MonoBehaviour {
 		inValZ = rotation.z;
 		previousInValX = inValX;
 		previousInValZ = inValZ;
+		integralX = 0;
+		integralZ = 0;
 
 		legWestMuscle = new Muscle(legWestMusclePoint, footWestMusclePoint);
 		legEastMuscle = new Muscle(legEastMusclePoint, footEastMusclePoint);
@@ -34,37 +52,43 @@ public class PIDControl : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		Vector3 rotation = transform.localEulerAngles;
-		print ("rotation = " + rotation.ToString ());
+
 		inValX = rotation.x;
-		print ("inValX = " + inValX);
+		inValX = (Mathf.PI * inValX) / 180.0f;
+
 		inValZ = rotation.z;
-		//print ("inValZ = " + inValZ);
+		inValZ = (Mathf.PI * inValZ) / 180.0f;
 
 
 		//TODO: Think about positive/negative derivative and their effects.
 		float derivativeX = (inValX - previousInValX) / Time.deltaTime;
 		float derivativeZ = (inValZ - previousInValZ) / Time.deltaTime;
 
-		if (inValX > 180) {
-			inValX -= 360;
+		if (inValX > Mathf.PI) {
+			inValX -= (2 * Mathf.PI);
 		}
-		if (inValZ > 180) {
-			inValZ -= 360;
+		if (inValZ > Mathf.PI) {
+			inValZ -= (2 * Mathf.PI);
 		}
 
-		//errorX = (invalX + 360 - goalX) % 360
+
+
+		//errorX = (invalX + (2 * Mathf.PI) - goalX) % (2 * Mathf.PI)
 		float errorX = inValX;
-		print ("errorX = " + errorX);
-		//errorZ = (invalZ + 360 - goalZ) % 360
+		//errorZ = (invalZ + (2 * Mathf.PI) - goalZ) % (2 * Mathf.PI)
 		float errorZ = inValZ;
 
-		float errorXInRadians = (Mathf.PI * errorX) / 180.0f;
-		print ("errorXInRadians = " + errorXInRadians);
-		float outValX = Mathf.Sin (errorXInRadians / 2f) * muscleForce;// - derivativeZ / 10f;
-		print ("outValX = " + outValX);
+		integralX += errorX;
+		integralZ += errorZ;
 
-		float errorZInRadians = (Mathf.PI * errorZ) / 180.0f;
-		float outValZ = Mathf.Sin (errorZInRadians / 2f) * muscleForce;// - derivativeZ / 10f;
+		derivativeX = (derivativeX - minDerivativeX) / (maxDerivativeX - minDerivativeX);
+		derivativeZ = (derivativeZ - minDerivativeZ) / (maxDerivativeZ - minDerivativeZ);
+
+		integralX = (integralX - minIntegralX) / (maxIntegralX - minIntegralX);
+		integralZ = (integralZ - minIntegralZ) / (maxIntegralZ - minIntegralZ);
+
+		float outValX = Mathf.Sin (errorX / 2f) * kp - derivativeX * kd + integralX * ki;
+		float outValZ = Mathf.Sin (errorZ/ 2f) * kp - derivativeZ * kd + integralX * ki;
 
 		//print ("errorX = " + errorX);
 		if (outValX > 0) {
