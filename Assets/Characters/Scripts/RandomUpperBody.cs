@@ -51,7 +51,7 @@ public class RandomUpperBody : MonoBehaviour
 		string chestPath = LoadRandomBodyPath ();
 		isQuadruped = chestPath.Equals ("Horse");
 		chest = InstantiateBodyPart(Resources.Load(charactersDir + chestPath + "/" + BodyParts.Chest), gameObject);
-		chest.transform.localScale += new Vector3 (0.5f, 0.5f, 0.5f);
+		chest.transform.localScale += new Vector3 (0.25f, 0.25f, 0.25f);
 		head = InstantiateBodyPart(LoadRandomBodyPart(BodyParts.Head), chest);
 		string upperArmPath = "Human"; /*LoadRandomBodyPath ();
 		while (upperArmPath.Equals ("T-Rex")) {
@@ -192,7 +192,7 @@ public class RandomUpperBody : MonoBehaviour
 	{
 		Joint joint = objectToAttach.GetComponent<Joint>();
 		objectToAttach.GetComponent<Rigidbody> ().mass = 0.001f;
-		objectToAttach.transform.localScale += new Vector3 (0.5f, 0.5f, 0.5f);
+		objectToAttach.transform.localScale += new Vector3 (0.25f, 0.25f, 0.25f);
 		joint.connectedBody = attachToObject.GetComponent<Rigidbody>();
 		joint.autoConfigureConnectedAnchor = false;
 		joint.connectedAnchor = attachToTransform.localPosition;
