@@ -140,6 +140,8 @@ public class RandomCharacter : MonoBehaviour
 
 	//Create two regions near left arm of character for using as spring anchors when punching
 	private void EnablePunching(){
+
+
 		leftFistHome = InstantiateBodyPart (Resources.Load(charactersDir + "TriggerRegion"),chest);
 		leftFistAway = InstantiateBodyPart (Resources.Load(charactersDir + "TriggerRegion"),chest);
 		PunchingScript punchingScript = leftFistAway.AddComponent<PunchingScript> ();
@@ -166,6 +168,7 @@ public class RandomCharacter : MonoBehaviour
 		leftHandSpring.spring = 8f;
 		leftHand.transform.position = leftHandPos;
 		//TODO: Fine tune punch region positions
+
 	}
 
 	private void EnableUserInput(){
@@ -203,6 +206,8 @@ public class RandomCharacter : MonoBehaviour
 		balanceIntelligence.leftFoot = leftFoot.GetComponent<Rigidbody> ();
 		balanceIntelligence.bodyCore = chest.GetComponent<Rigidbody> ();
 	}*/
+
+	//Sätt en fästpunkt för den högra underarmen. Spring joint.
 
     void Update()
     {

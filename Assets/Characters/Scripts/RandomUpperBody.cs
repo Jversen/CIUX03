@@ -31,6 +31,16 @@ public class RandomUpperBody : MonoBehaviour
 	private GameObject leftFistHome;
 	private GameObject leftFistAway;
 
+	private HingeJoint hjll;
+	private HingeJoint hjlu; 
+	private HingeJoint hjrl; 
+	private HingeJoint hjru;
+
+	private JointSpring leftLowerHingeSpring;
+	private JointSpring leftUpperHingeSpring;
+	private JointSpring rightLowerHingeSpring;
+	private JointSpring rightUpperHingeSpring;
+
 	void Start()
 	{
 
@@ -81,7 +91,7 @@ public class RandomUpperBody : MonoBehaviour
 		attach(head, chest, chest.transform.Find("Head Socket"));
 		attach(leftUpperArm, chest, chest.transform.Find("Left Arm Socket"));
 		attach(rightUpperArm, chest, chest.transform.Find("Right Arm Socket"));
-		attachSliceable(leftLowerArm, leftUpperArm, leftUpperArm.transform.Find("Lower Arm Socket"));
+		attachHinge(leftLowerArm, leftUpperArm, leftUpperArm.transform.Find("Lower Arm Socket"));
 		attachSliceable(rightLowerArm, rightUpperArm, rightUpperArm.transform.Find("Lower Arm Socket"));
 		attachSliceable(leftHand, leftLowerArm, leftLowerArm.transform.Find("Hand Socket"));
 		attachSliceable(rightHand, rightLowerArm, rightLowerArm.transform.Find("Hand Socket"));
@@ -90,7 +100,14 @@ public class RandomUpperBody : MonoBehaviour
 		joint.connectedBody = chest.GetComponent<Rigidbody>();
 
 
-
+		hjll = leftLowerArm.GetComponent<HingeJoint>();
+		hjlu = leftUpperArm.GetComponent<HingeJoint>();
+		hjrl = rightLowerArm.GetComponent<HingeJoint>();
+		hjru = rightUpperArm.GetComponent<HingeJoint>(); 
+		leftLowerHingeSpring = hjll.spring;
+		leftUpperHingeSpring = hjlu.spring;
+		rightLowerHingeSpring = hjrl.spring;
+		rightUpperHingeSpring = hjru.spring;
 
 		EnablePunching ();
 		//EnableUserInput ();
@@ -119,7 +136,25 @@ public class RandomUpperBody : MonoBehaviour
 
 	//Create two regions near left arm of character for using as spring anchors when punching
 	private void EnablePunching(){
-		leftFistHome = InstantiateBodyPart (Resources.Load(charactersDir + "TriggerRegion"),chest);
+
+		//Västra armen
+		leftLowerHingeSpring.spring = 999999;
+		leftLowerHingeSpring.targetPosition = 50;
+		leftUpperHingeSpring.spring = 999999;
+		leftUpperHingeSpring.targetPosition = -100;
+
+		//Högra armen
+		rightLowerHingeSpring.spring = 999999;
+		rightLowerHingeSpring.targetPosition = -50;
+		rightUpperHingeSpring.spring = 999999;
+		rightUpperHingeSpring.targetPosition = -100;
+
+		hjll.spring = leftLowerHingeSpring;
+		hjlu.spring = leftUpperHingeSpring;
+		hjrl.spring = rightLowerHingeSpring;
+		hjru.spring = rightUpperHingeSpring;
+
+		/*leftFistHome = InstantiateBodyPart (Resources.Load(charactersDir + "TriggerRegion"),chest);
 		leftFistAway = InstantiateBodyPart (Resources.Load(charactersDir + "TriggerRegion"),chest);
 		PunchingScript punchingScript = leftFistAway.AddComponent<PunchingScript> ();
 		punchingScript.key = punchKey;
@@ -145,7 +180,7 @@ public class RandomUpperBody : MonoBehaviour
 		leftHandSpring.enableCollision = true;
 		leftHandSpring.spring = 8f;
 		leftHand.transform.position = leftHandPos;
-		//TODO: Fine tune punch region positions
+		//TODO: Fine tune punch region positions*/
 	}
 
 	private void EnableUserInput(){
@@ -162,6 +197,36 @@ public class RandomUpperBody : MonoBehaviour
 		if (head.transform.position.y < 3) {
 			Ragdoll.MakeRagdoll (chest.transform.parent.parent.gameObject);
 		}
+
+		if(Input.GetKeyDown("o")){
+			//Västra armen
+			leftLowerHingeSpring.targetPosition = 0;
+			leftUpperHingeSpring.targetPosition = -100;
+
+			//Högra armen
+			rightLowerHingeSpring.targetPosition = 0;
+			rightUpperHingeSpring.targetPosition = -100;
+
+			hjll.spring = leftLowerHingeSpring;
+			hjlu.spring = leftUpperHingeSpring;
+			hjrl.spring = rightLowerHingeSpring;
+			hjru.spring = rightUpperHingeSpring;
+
+			/*//Västra armen
+			leftLowerHingeSpring.targetPosition = 50;
+			leftUpperHingeSpring.targetPosition = -100;
+
+			//Högra armen
+			rightLowerHingeSpring.targetPosition = -50;
+			rightUpperHingeSpring.targetPosition = -100;
+
+			hjll.spring = leftLowerHingeSpring;
+			hjlu.spring = leftUpperHingeSpring;
+			hjrl.spring = rightLowerHingeSpring;
+			hjru.spring = rightUpperHingeSpring;*/
+		}
+
+
 	}
 
 	private string LoadRandomBodyPath()
@@ -191,6 +256,18 @@ public class RandomUpperBody : MonoBehaviour
 	private void attach(GameObject objectToAttach, GameObject attachToObject, Transform attachToTransform)
 	{
 		Joint joint = objectToAttach.GetComponent<Joint>();
+		objectToAttach.GetComponent<Rigidbody> ().mass = 0.001f;
+		objectToAttach.transform.localScale += new Vector3 (0.25f, 0.25f, 0.25f);
+		joint.connectedBody = attachToObject.GetComponent<Rigidbody>();
+		joint.autoConfigureConnectedAnchor = false;
+		joint.connectedAnchor = attachToTransform.localPosition;
+
+		objectToAttach.transform.localPosition = attachToTransform.localPosition - joint.anchor / 2;
+	}
+
+	private void attachHinge(GameObject objectToAttach, GameObject attachToObject, Transform attachToTransform)
+	{
+		HingeJoint joint = objectToAttach.GetComponent<HingeJoint>();
 		objectToAttach.GetComponent<Rigidbody> ().mass = 0.001f;
 		objectToAttach.transform.localScale += new Vector3 (0.25f, 0.25f, 0.25f);
 		joint.connectedBody = attachToObject.GetComponent<Rigidbody>();
