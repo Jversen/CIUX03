@@ -16,7 +16,7 @@ public class BalanceIntelligence : MonoBehaviour {
 	public Rigidbody leftFoot, rightFoot, bodyCore, footGoalMarker;
 	public float betweenFeetVectorToBodyCoGEpsilon, muscleForce;
 	public float forceHamstring, forceGluteus, forceHip, forceAbs, forceBack;
-	private bool leftFootContact = false; 
+	private bool leftFootContact = false;
 	private bool rightFootContact = false;
 	private Vector3 leftFootCoG, rightFootCoG, bodyCoG, betweenFeetVector, leftFootCoGToBodyCoG, rightFootCoGToBodyCoG, leftFootGoalCoG, rightFootGoalCoG,
 	bodyCoGToFeetVector;
@@ -43,12 +43,12 @@ public class BalanceIntelligence : MonoBehaviour {
 
 	// Update is called once per frame
 	void FixedUpdate () {
-		
-			if (Input.GetKey (KeyCode.U)) {
+
+		if (Input.GetKey (KeyCode.U)) {
 			leftHip.MoveMuscle(muscleForce);
-			} else if (Input.GetKey (KeyCode.O)) {
+		} else if (Input.GetKey (KeyCode.O)) {
 			rightHip.MoveMuscle(muscleForce);
-			} 
+		}
 
 		betweenFeetVector = GetBetweenFeetVector (leftFoot, rightFoot);
 
@@ -66,15 +66,15 @@ public class BalanceIntelligence : MonoBehaviour {
 
 		//leftFootCollider = leftFoot.GetComponent<Collider>();
 		/*print ("Left foot's CoG: " + leftFootCoG);
-		print ("Right foot's CoG: " + rightFootCoG);
-		print ("Vector between feet: " + betweenFeetVector);
-		print ("Distance between feet: " + feetDistance);
-
-		print ("Torso's CoG: " + bodyCoG);
-		print ("Vector between feetVector and bodyCoG: " + bodyCoGToFeetVector);
-		print ("Distance between feetVector and bodyCoG: " + bodyCoGToFeetVector.magnitude);
-
-		print ("Is body's CoG inside the feet's support polygon?: " + IsBodySupported());*/
+        print ("Right foot's CoG: " + rightFootCoG);
+        print ("Vector between feet: " + betweenFeetVector);
+        print ("Distance between feet: " + feetDistance);
+ 
+        print ("Torso's CoG: " + bodyCoG);
+        print ("Vector between feetVector and bodyCoG: " + bodyCoGToFeetVector);
+        print ("Distance between feetVector and bodyCoG: " + bodyCoGToFeetVector.magnitude);
+ 
+        print ("Is body's CoG inside the feet's support polygon?: " + IsBodySupported());*/
 
 		if (fScript.IsReached ()) {
 			isWalking = false;
@@ -82,11 +82,11 @@ public class BalanceIntelligence : MonoBehaviour {
 		} else {
 			print ("isWalking is true");
 		}
-			
+
 		if (IsBodySupported ()) {
 			//use balancing script in PIDControl/skeletonMuscles
 		} else {
-			
+
 			if (!isWalking) {
 				//print ("Not supported, moving ");
 				if (leftFootCoGToBodyCoG.magnitude > rightFootCoGToBodyCoG.magnitude) {
@@ -100,21 +100,21 @@ public class BalanceIntelligence : MonoBehaviour {
 		}
 
 		/*leftHamstring.MoveMuscle (forceHamstring);
-		rightHamstring.MoveMuscle (forceHamstring);
-		leftGluteus.MoveMuscle (forceGluteus);
-		rightGluteus.MoveMuscle (forceGluteus);
-		leftHip.MoveMuscle (forceHip);
-		rightHip.MoveMuscle (forceHip);
-		abs.MoveMuscle (forceAbs);
-		back.MoveMuscle (forceBack);*/
+        rightHamstring.MoveMuscle (forceHamstring);
+        leftGluteus.MoveMuscle (forceGluteus);
+        rightGluteus.MoveMuscle (forceGluteus);
+        leftHip.MoveMuscle (forceHip);
+        rightHip.MoveMuscle (forceHip);
+        abs.MoveMuscle (forceAbs);
+        back.MoveMuscle (forceBack);*/
 	}
 
 
-		void OnCollisionStay(Collision collisionInfo) {
-			foreach (ContactPoint contact in collisionInfo.contacts) {
+	void OnCollisionStay(Collision collisionInfo) {
+		foreach (ContactPoint contact in collisionInfo.contacts) {
 			print (contact.point);
-			}
 		}
+	}
 
 
 	Vector3 GetBetweenFeetVector(Rigidbody foot1, Rigidbody foot2){
@@ -136,9 +136,9 @@ public class BalanceIntelligence : MonoBehaviour {
 
 	/* Is the body's center of gravity inside the feet's support polygon?*/
 	bool IsBodySupported(){
-		
+
 		//if (Mathf.Abs(bodyCoGToFeetVector.magnitude) <= betweenFeetVectorToBodyCoGEpsilon){
-		if(UnityEditor.HandleUtility.DistancePointLine(bodyCoG, GetCenterOfGravity(leftFoot), GetCenterOfGravity(rightFoot)) <= 
+		if(UnityEditor.HandleUtility.DistancePointLine(bodyCoG, GetCenterOfGravity(leftFoot), GetCenterOfGravity(rightFoot)) <=
 			betweenFeetVectorToBodyCoGEpsilon){
 			return true;
 		} else {
@@ -162,7 +162,7 @@ public class BalanceIntelligence : MonoBehaviour {
 
 		FootGoalColliderScript fScript = (FootGoalColliderScript) footGoalMarker.gameObject.GetComponent(typeof(FootGoalColliderScript));
 
-		footGoalMarker.transform.position = new Vector3(goalPos[0], 0.5f, goalPos[2]); 
+		footGoalMarker.transform.position = new Vector3(goalPos[0], 0.5f, goalPos[2]);
 		moveFoot.transform.position = new Vector3(goalPos[0], 0.5f, goalPos[2]);
 		fScript.CreateJoint (moveFoot);
 		moveFoot.transform.position = initialFootPos;
@@ -180,9 +180,9 @@ public class BalanceIntelligence : MonoBehaviour {
 			print ("isWalking is false");
 		}
 		return goalPos;
-				
+
 	}
-		
+
 	void OnDrawGizmos() {
 		Gizmos.color = Color.red;
 		Gizmos.DrawLine (leftFootCoG, rightFootCoG);
@@ -218,13 +218,13 @@ public class BalanceIntelligence : MonoBehaviour {
 		print ("Entered OnCollisionEnter");
 		if (coll.contacts[0].thisCollider.gameObject.CompareTag("Plane")){
 			if (coll.contacts [1].thisCollider.gameObject.CompareTag ("LeftFoot")) {
-				leftFootContact = true; 
+				leftFootContact = true;
 			} else if (coll.contacts [1].thisCollider.gameObject.CompareTag ("RightFoot")) {
 				rightFootContact = true;
 			}
 		} else if (coll.contacts[1].thisCollider.gameObject.CompareTag("Ground")){
 			if (coll.contacts [0].thisCollider.gameObject.CompareTag ("LeftFoot")) {
-				leftFootContact = true; 
+				leftFootContact = true;
 			} else if (coll.contacts [0].thisCollider.gameObject.CompareTag ("RightFoot")) {
 				rightFootContact = true;
 			}
@@ -238,13 +238,13 @@ public class BalanceIntelligence : MonoBehaviour {
 		print ("Entered OnCollisionExit");
 		if (coll.contacts[0].thisCollider.gameObject.CompareTag("Ground")){
 			if (coll.contacts [1].thisCollider.gameObject.CompareTag ("LeftFoot")) {
-				leftFootContact = false; 
+				leftFootContact = false;
 			} else if (coll.contacts [1].thisCollider.gameObject.CompareTag ("RightFoot")) {
 				rightFootContact = false;
 			}
 		} else if (coll.contacts[1].thisCollider.gameObject.CompareTag("Ground")){
 			if (coll.contacts [0].thisCollider.gameObject.CompareTag ("LeftFoot")) {
-				leftFootContact = false; 
+				leftFootContact = false;
 			} else if (coll.contacts [0].thisCollider.gameObject.CompareTag ("RightFoot")) {
 				rightFootContact = false;
 			}

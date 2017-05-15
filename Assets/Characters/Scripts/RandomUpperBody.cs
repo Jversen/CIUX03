@@ -14,8 +14,11 @@ public class RandomUpperBody : MonoBehaviour
 	public bool rotate;
 	public string punchKey;
 
-	public string horizontalAxis;
-	public string verticalAxis;
+	public float force;
+	public string up;
+	public string down;
+	public string left;
+	public string right;
 
 	public GameObject lowerBody;
 
@@ -48,7 +51,7 @@ public class RandomUpperBody : MonoBehaviour
 	{
 		counter = 0;
 
-		transform.position = lowerBody.transform.position + new Vector3 (0, 1.5f, 0);
+		transform.position = lowerBody.transform.position + new Vector3 (0, 2f, 0);
 		if (rotate) {
 			transform.Rotate (new Vector3 (0, -90, 0));
 		} else {
@@ -192,13 +195,21 @@ public class RandomUpperBody : MonoBehaviour
 	}
 
 	private void EnableUserInput(){
-		InputControl controller = gameObject.AddComponent<InputControl> ();
-		controller.characterChest = chest.GetComponent<Rigidbody> ();
+		Controller controller = gameObject.AddComponent<Controller> ();
+		controller.body = chest.GetComponent<Rigidbody>();
+		controller.up = up;
+		controller.down = down;
+		controller.left = left;
+		controller.right = right;
+		controller.force = force;
+
+		/*controller.characterChest = chest.GetComponent<Rigidbody> ();
 		controller.forceConstant = 1000;
 		controller.rotationSpeed = 1000;
 		controller.horizontalAxis = horizontalAxis;
-		controller.verticalAxis = verticalAxis;
+		controller.verticalAxis = verticalAxis;*/
 	}
+
 	private void Expand(){
 		//Västra armen
 		leftLowerHingeSpring.targetPosition = 0;
@@ -249,10 +260,6 @@ public class RandomUpperBody : MonoBehaviour
 			flex = false;
 			counter = 0;
 		}
-
-		Debug.Log (counter);
-
-
 	}
 
 	private string LoadRandomBodyPath()
@@ -263,7 +270,6 @@ public class RandomUpperBody : MonoBehaviour
 	private Object LoadRandomBodyPart(BodyParts bodyPart)
 	{  
 		string character = LoadRandomBodyPath ();
-		print ("character = " + character + ", bodyPart = " + bodyPart);
 		return Resources.Load(charactersDir + character + "/" + bodyPart);
 	}
 
