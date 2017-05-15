@@ -32,8 +32,8 @@ public class RandomUpperBody : MonoBehaviour
 	private GameObject leftFistAway;
 
 	private HingeJoint hjll;
-	private HingeJoint hjlu; 
-	private HingeJoint hjrl; 
+	private HingeJoint hjlu;
+	private HingeJoint hjrl;
 	private HingeJoint hjru;
 
 	private JointSpring leftLowerHingeSpring;
@@ -41,8 +41,12 @@ public class RandomUpperBody : MonoBehaviour
 	private JointSpring rightLowerHingeSpring;
 	private JointSpring rightUpperHingeSpring;
 
+	private float counter;
+	private bool flex;
+
 	void Start()
 	{
+		counter = 0;
 
 		transform.position = lowerBody.transform.position + new Vector3 (0, 1.5f, 0);
 		if (rotate) {
@@ -64,9 +68,9 @@ public class RandomUpperBody : MonoBehaviour
 		chest.transform.localScale += new Vector3 (0.25f, 0.25f, 0.25f);
 		head = InstantiateBodyPart(LoadRandomBodyPart(BodyParts.Head), chest);
 		string upperArmPath = "Human"; /*LoadRandomBodyPath ();
-		while (upperArmPath.Equals ("T-Rex")) {
-			upperArmPath = LoadRandomBodyPath ();
-		}*/
+        while (upperArmPath.Equals ("T-Rex")) {
+            upperArmPath = LoadRandomBodyPath ();
+        }*/
 		leftUpperArm = InstantiateBodyPart(Resources.Load(charactersDir + upperArmPath + "/" + BodyParts.LeftUpperArm), chest);
 		rightUpperArm = InstantiateBodyPart(Resources.Load(charactersDir + upperArmPath + "/" + BodyParts.RightUpperArm), chest);
 		string lowerArmPath = "Horse";
@@ -76,6 +80,10 @@ public class RandomUpperBody : MonoBehaviour
 		leftHand = InstantiateBodyPart(Resources.Load(charactersDir + footPath + "/" + BodyParts.LeftHand), leftLowerArm);
 		rightHand = InstantiateBodyPart(Resources.Load(charactersDir + footPath + "/" + BodyParts.RightHand), rightLowerArm);
 		leftHand.tag = "Hand";
+
+		//Added new tags 2017-05-11
+		head.tag = "Head";
+		rightHand.tag = "Hand";
 
 		//TODO: Instantiate lower body
 
@@ -103,7 +111,7 @@ public class RandomUpperBody : MonoBehaviour
 		hjll = leftLowerArm.GetComponent<HingeJoint>();
 		hjlu = leftUpperArm.GetComponent<HingeJoint>();
 		hjrl = rightLowerArm.GetComponent<HingeJoint>();
-		hjru = rightUpperArm.GetComponent<HingeJoint>(); 
+		hjru = rightUpperArm.GetComponent<HingeJoint>();
 		leftLowerHingeSpring = hjll.spring;
 		leftUpperHingeSpring = hjlu.spring;
 		rightLowerHingeSpring = hjrl.spring;
@@ -155,32 +163,32 @@ public class RandomUpperBody : MonoBehaviour
 		hjru.spring = rightUpperHingeSpring;
 
 		/*leftFistHome = InstantiateBodyPart (Resources.Load(charactersDir + "TriggerRegion"),chest);
-		leftFistAway = InstantiateBodyPart (Resources.Load(charactersDir + "TriggerRegion"),chest);
-		PunchingScript punchingScript = leftFistAway.AddComponent<PunchingScript> ();
-		punchingScript.key = punchKey;
-
-		punchingScript.fist = leftHand.GetComponent <Rigidbody>();
-		punchingScript.home = leftFistHome.GetComponent<Rigidbody>();
-
-		float upperArmLength = GetLongest (leftUpperArm.GetComponent<Renderer> ().bounds.size);
-		float armLength = GetLongest (leftLowerArm.GetComponent<Renderer> ().bounds.size) + upperArmLength;
-
-		leftHand.GetComponent<Rigidbody> ().mass = 0.1f;
-		leftUpperArm.GetComponent<Rigidbody> ().mass = 0.1f;
-		leftLowerArm.GetComponent<Rigidbody> ().mass = 0.1f;
-
-		Vector3 leftShoulderPos = chest.transform.Find ("Left Arm Socket").position;
-		leftFistHome.transform.position = leftShoulderPos + leftFistHome.transform.forward * upperArmLength - leftFistHome.transform.up * 0.1f;
-		leftFistAway.transform.position = leftShoulderPos + leftFistAway.transform.forward * armLength - leftFistAway.transform.up * 0.1f;
-
-		Vector3 leftHandPos = leftHand.transform.position;
-		leftHand.transform.position = leftFistHome.transform.position;
-		SpringJoint leftHandSpring = leftHand.AddComponent<SpringJoint> ();
-		leftHandSpring.connectedBody = leftFistHome.GetComponent<Rigidbody> ();
-		leftHandSpring.enableCollision = true;
-		leftHandSpring.spring = 8f;
-		leftHand.transform.position = leftHandPos;
-		//TODO: Fine tune punch region positions*/
+        leftFistAway = InstantiateBodyPart (Resources.Load(charactersDir + "TriggerRegion"),chest);
+        PunchingScript punchingScript = leftFistAway.AddComponent<PunchingScript> ();
+        punchingScript.key = punchKey;
+ 
+        punchingScript.fist = leftHand.GetComponent <Rigidbody>();
+        punchingScript.home = leftFistHome.GetComponent<Rigidbody>();
+ 
+        float upperArmLength = GetLongest (leftUpperArm.GetComponent<Renderer> ().bounds.size);
+        float armLength = GetLongest (leftLowerArm.GetComponent<Renderer> ().bounds.size) + upperArmLength;
+ 
+        leftHand.GetComponent<Rigidbody> ().mass = 0.1f;
+        leftUpperArm.GetComponent<Rigidbody> ().mass = 0.1f;
+        leftLowerArm.GetComponent<Rigidbody> ().mass = 0.1f;
+ 
+        Vector3 leftShoulderPos = chest.transform.Find ("Left Arm Socket").position;
+        leftFistHome.transform.position = leftShoulderPos + leftFistHome.transform.forward * upperArmLength - leftFistHome.transform.up * 0.1f;
+        leftFistAway.transform.position = leftShoulderPos + leftFistAway.transform.forward * armLength - leftFistAway.transform.up * 0.1f;
+ 
+        Vector3 leftHandPos = leftHand.transform.position;
+        leftHand.transform.position = leftFistHome.transform.position;
+        SpringJoint leftHandSpring = leftHand.AddComponent<SpringJoint> ();
+        leftHandSpring.connectedBody = leftFistHome.GetComponent<Rigidbody> ();
+        leftHandSpring.enableCollision = true;
+        leftHandSpring.spring = 8f;
+        leftHand.transform.position = leftHandPos;
+        //TODO: Fine tune punch region positions*/
 	}
 
 	private void EnableUserInput(){
@@ -191,6 +199,35 @@ public class RandomUpperBody : MonoBehaviour
 		controller.horizontalAxis = horizontalAxis;
 		controller.verticalAxis = verticalAxis;
 	}
+	private void Expand(){
+		//Västra armen
+		leftLowerHingeSpring.targetPosition = 0;
+		leftUpperHingeSpring.targetPosition = -100;
+
+		//Högra armen
+		rightLowerHingeSpring.targetPosition = 0;
+		rightUpperHingeSpring.targetPosition = -100;
+
+		hjll.spring = leftLowerHingeSpring;
+		hjlu.spring = leftUpperHingeSpring;
+		hjrl.spring = rightLowerHingeSpring;
+		hjru.spring = rightUpperHingeSpring;
+	}
+
+	private void Contract(){
+		//Västra armen
+		leftLowerHingeSpring.targetPosition = 50;
+		leftUpperHingeSpring.targetPosition = -100;
+
+		//Högra armen
+		rightLowerHingeSpring.targetPosition = -50;
+		rightUpperHingeSpring.targetPosition = -100;
+
+		hjll.spring = leftLowerHingeSpring;
+		hjlu.spring = leftUpperHingeSpring;
+		hjrl.spring = rightLowerHingeSpring;
+		hjru.spring = rightUpperHingeSpring;
+	}
 
 	void Update()
 	{
@@ -199,32 +236,21 @@ public class RandomUpperBody : MonoBehaviour
 		}
 
 		if(Input.GetKeyDown("o")){
-			//Västra armen
-			leftLowerHingeSpring.targetPosition = 0;
-			leftUpperHingeSpring.targetPosition = -100;
-
-			//Högra armen
-			rightLowerHingeSpring.targetPosition = 0;
-			rightUpperHingeSpring.targetPosition = -100;
-
-			hjll.spring = leftLowerHingeSpring;
-			hjlu.spring = leftUpperHingeSpring;
-			hjrl.spring = rightLowerHingeSpring;
-			hjru.spring = rightUpperHingeSpring;
-
-			/*//Västra armen
-			leftLowerHingeSpring.targetPosition = 50;
-			leftUpperHingeSpring.targetPosition = -100;
-
-			//Högra armen
-			rightLowerHingeSpring.targetPosition = -50;
-			rightUpperHingeSpring.targetPosition = -100;
-
-			hjll.spring = leftLowerHingeSpring;
-			hjlu.spring = leftUpperHingeSpring;
-			hjrl.spring = rightLowerHingeSpring;
-			hjru.spring = rightUpperHingeSpring;*/
+			Expand ();
+			flex = true;
 		}
+
+		if (flex) {
+			counter = counter + Time.deltaTime;
+		}
+
+		if(counter >= 0.5f){
+			Contract ();
+			flex = false;
+			counter = 0;
+		}
+
+		Debug.Log (counter);
 
 
 	}
@@ -235,7 +261,7 @@ public class RandomUpperBody : MonoBehaviour
 	}
 
 	private Object LoadRandomBodyPart(BodyParts bodyPart)
-	{	
+	{  
 		string character = LoadRandomBodyPath ();
 		print ("character = " + character + ", bodyPart = " + bodyPart);
 		return Resources.Load(charactersDir + character + "/" + bodyPart);
@@ -299,4 +325,14 @@ public class RandomUpperBody : MonoBehaviour
 	public bool IsQuadruped(){
 		return isQuadruped;
 	}
+	/*
+	void OnCollisionEnter(Collision col){
+		if(col.gameObject.tag == "Chest" || col.gameObject.tag == "Head"){
+			//Taget från answers.unity3d.com/questions/1100879/push-object-in-opposite-direction-of-collision.html
+			Vector3 dir = col.contacts[0].point - transform.position;
+			dir=-dir.normalized;
+			GetComponent<Rigidbody>().AddForce(dir*10000);
+		}
+	}
+	*/
 }
