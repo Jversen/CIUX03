@@ -16,7 +16,9 @@ public class ChangeScene : MonoBehaviour {
 		} else if(Input.GetKey("2")){
 			SceneManager.LoadScene ("Scenes/DemoMuscles");
 		} else if(Input.GetKey("3")){
-
+			SceneManager.LoadScene ("Scenes/MusclePIDScene");
+		}else if(Input.GetKey("4")){
+			SceneManager.LoadScene ("Scenes/Arena3");
 		}
 	}
 }
