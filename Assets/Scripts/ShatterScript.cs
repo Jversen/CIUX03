@@ -16,7 +16,7 @@ public class ShatterScript : MonoBehaviour {
 	}
 
 	void OnCollisionEnter(Collision col){
-		//transform.Rotate (-90, 0, 0);
+		transform.Rotate (-90, 0, 0);
 		Instantiate (prefab, transform.position, transform.rotation);
 		Destroy (gameObject);
 	}
