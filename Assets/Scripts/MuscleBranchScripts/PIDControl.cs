@@ -93,20 +93,20 @@ public class PIDControl : MonoBehaviour {
 		//print ("errorX = " + errorX);
 		if (outValX > 0) {
 			//positive X -> contract west
-			legWestMuscle.Contract(outValX);
+			legWestMuscle.Contract(outValX*0.5f);
 		} else {
 			outValX = Mathf.Abs (outValX); //Negative outVal determines which muscles to contract but contraction force is always positive.
 			//negative X -> contract east
-			legEastMuscle.Contract(outValX);
+			legEastMuscle.Contract(outValX*0.5f);
 		}
 		//print ("errorZ = " + errorZ);
 		if (outValZ > 0) {
 			//positive Z -> contract south
-			legSouthMuscle.Contract(outValZ);
+			legSouthMuscle.Contract(outValZ*0.5f);
 		} else {
 			outValZ = Mathf.Abs (outValZ); //Negative outVal determines which muscles to contract but contraction force is always positive.
 			//negative Z -> contract north
-			legNorthMuscle.Contract(outValZ);
+			legNorthMuscle.Contract(outValZ*0.5f);
 		}
 
 		previousInValX = inValX;
