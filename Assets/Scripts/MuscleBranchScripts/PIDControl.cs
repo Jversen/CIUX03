@@ -25,7 +25,7 @@ public class PIDControl : MonoBehaviour {
 	public static float minIntegralX = 60f;
 	public static float minIntegralZ = 60f;
 
-
+	public float kForce;
 
 	private float inValX;
 	private float inValZ;
@@ -35,6 +35,7 @@ public class PIDControl : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		kForce = 1;
 		Vector3 rotation = transform.localEulerAngles;
 		inValX = rotation.x;
 		inValZ = rotation.z;
@@ -93,20 +94,20 @@ public class PIDControl : MonoBehaviour {
 		//print ("errorX = " + errorX);
 		if (outValX > 0) {
 			//positive X -> contract west
-			legWestMuscle.Contract(outValX*0.5f);
+			legWestMuscle.Contract(outValX*kForce);
 		} else {
 			outValX = Mathf.Abs (outValX); //Negative outVal determines which muscles to contract but contraction force is always positive.
 			//negative X -> contract east
-			legEastMuscle.Contract(outValX*0.5f);
+			legEastMuscle.Contract(outValX*kForce);
 		}
 		//print ("errorZ = " + errorZ);
 		if (outValZ > 0) {
 			//positive Z -> contract south
-			legSouthMuscle.Contract(outValZ*0.5f);
+			legSouthMuscle.Contract(outValZ*kForce);
 		} else {
 			outValZ = Mathf.Abs (outValZ); //Negative outVal determines which muscles to contract but contraction force is always positive.
 			//negative Z -> contract north
-			legNorthMuscle.Contract(outValZ*0.5f);
+			legNorthMuscle.Contract(outValZ*kForce);
 		}
 
 		previousInValX = inValX;

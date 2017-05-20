@@ -57,8 +57,8 @@ public class MuscleBehaviour : MonoBehaviour
 			rightBackChest.MoveMuscle (-hip);
 			leftBackChest.MoveMuscle (-hip);
 		}else if(Input.GetKey("j")){
-			rightBackGluteus.MoveMuscle (knee);
-			leftBackGluteus.MoveMuscle (knee);
+			rightBackHamstring.MoveMuscle (knee);
+			leftBackHamstring.MoveMuscle (knee);
 		}
 		else if(Input.GetKey("k")){
 			rightBackGastro.MoveMuscle (ankle);
@@ -73,8 +73,8 @@ public class MuscleBehaviour : MonoBehaviour
 			rightBackChest.MoveMuscle (hip);
 			leftBackChest.MoveMuscle (hip);
 		}else if(Input.GetKey("u")){
-			rightBackGluteus.MoveMuscle (-knee);
-			leftBackGluteus.MoveMuscle (-knee);
+			rightBackHamstring.MoveMuscle (-knee);
+			leftBackHamstring.MoveMuscle (-knee);
 		}
 		else if(Input.GetKey("i")){
 			rightBackGastro.MoveMuscle (-ankle);
